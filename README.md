@@ -15,11 +15,11 @@ sabado - reunion y trabajo
 domingo - reunion y trabajo
 
 # Reparticion inicial del proyecto:
-Abel: Lectura y escritura de .csv.
+Abel: Lectura y escritura de .csv. - Buen manejo de Git y Github
 
-Marco: Busqueda "eficiente" de peliculas.
+Marco: Busqueda "eficiente" de peliculas. - Buen manejo de Git y Github
 
-Stiff: README.md - Interfaz del proyecto - FTXUI - ncurses.
+Stiff: README.md - Interfaz del proyecto - FTXUI - ncurses. - Buen manejo de Git y Github
 
 # Pendientes
 Preguntar el profesor sobre el papel que deben tener los arboles.
