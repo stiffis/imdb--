@@ -27,12 +27,24 @@ Preguntar sobre la grabacion y exposicion y detalles y estructura.
 Preguntar sobre la tabla del readme.
 Estructura de directorios del proyecto
 # Rubrica
-Funcionamiento: Buena funcionamiento en todo sentido, explicitamente el manejo eficiente de gran informacion, documentacion adecuada.
+### Funcionamiento: 
+- [ ] Buena funcionamiento en todo sentido, explicitamente el manejo eficiente de gran informacion.
+- [ ] Documentacion adecuada.
 
-EStructuras y Herramientas: Buena abstracción, codigo generico.
+### EStructuras y Herramientas: 
+- [ ] Buena abstracción.
+- [ ] Codigo generico.
 
-Algoritmo: Uso de algoritmos de la STD de c++, eficiencia temporal y espacial en el uso de algoritmos.
+### Algoritmo: 
+- [ ] Uso de algoritmos de la STD de c++. 
+- [ ] Eficiencia temporal y espacial en el uso de algoritmos.
 
-Diseño de Software y Programacion Paralela: Al menos 4 patrones de diseño, uso de programación paralela para la optimizacion de la busqueda y una tabla en el README comparando tiempos.
+### Diseño de Software y Programacion Paralela: 
+- [ ] Al menos 4 patrones de diseño. 
+- [ ] Uso de programación paralela para la optimizacion de la busqueda. 
+- [ ] Una tabla en el README comparando tiempos.
 
-Presentación y Documentación: Uso de GitHub y README.md con citas bibliograficas en APA, y buena exposición.
+### Presentación y Documentación: 
+- [ ] Uso de GitHub
+- [ ] README.md con citas bibliograficas en APA.
+- [ ] Y buena exposición.
