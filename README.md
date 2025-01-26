@@ -38,6 +38,6 @@ Estructura de directorios del proyecto
 - [ ] Una tabla en el README comparando tiempos.
 
 ### Presentación y Documentación: 
-- [ ] Uso de GitHub
+- [x] Uso de GitHub
 - [ ] README.md con citas bibliográficas en APA.
 - [ ] Y buena exposición.
