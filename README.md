@@ -15,10 +15,13 @@ Marco: Busqueda "eficiente" de peliculas. - Buen manejo de Git y Github
 Stiff: README.md - Interfaz del proyecto - FTXUI - ncurses. - Buen manejo de Git y Github
 
 # Pendientes
-Preguntar el profesor sobre el papel que deben tener los arboles.
-Preguntar sobre la grabación y exposición y detalles y estructura.
-Preguntar sobre la tabla del readme donde se compararn tiempos ¿Qué tiempos?.
-Estructura de directorios del proyecto
+- Preguntar el profesor sobre el papel que deben tener los arboles.
+    - Rpta: Las palabras no se almacenan en "strings" se almacenan en arboles.
+- Preguntar sobre la grabación y exposición y detalles y estructura.
+    - Rpta: Probablemente no haya exposición.
+- Preguntar sobre la tabla del readme donde se compararn tiempos ¿Qué tiempos?.
+    - Rpta: Comparar tiempos dependiendo de lo que se busca ejem: bar- barco- barco fantasma - fantas...
+- Estructura de directorios del proyecto
 # Rubrica
 ### Funcionamiento: 
 - [ ] Buena funcionamiento en todo sentido, explicitamente el manejo eficiente de gran información.
