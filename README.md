@@ -17,7 +17,7 @@ Stiff: README.md - Interfaz del proyecto - FTXUI - ncurses. - Buen manejo de Git
 # Pendientes
 Preguntar el profesor sobre el papel que deben tener los arboles.
 Preguntar sobre la grabación y exposición y detalles y estructura.
-Preguntar sobre la tabla del readme.
+Preguntar sobre la tabla del readme donde se compararn tiempos ¿Qué tiempos?.
 Estructura de directorios del proyecto
 # Rubrica
 ### Funcionamiento: 
