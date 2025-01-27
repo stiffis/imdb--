@@ -42,4 +42,5 @@ Estructura de directorios del proyecto
 - [ ] README.md con citas bibliográficas en APA.
 - [ ] Y buena exposición.
 
+---
 <p align="center">Copyright &copy; 2025-present <a href="https://github.com/stiffis/imdb--" target="_blank">IMDb-- Org</a>
