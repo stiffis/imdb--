@@ -41,3 +41,14 @@ Estructura de directorios del proyecto
 - [x] Uso de GitHub
 - [ ] README.md con citas bibliográficas en APA.
 - [ ] Y buena exposición.
+
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copyright</title>
+</head>
+<body style="text-align: center; margin-top: 20%;">
+  Copyright 2025 - presente IMDb--. Todos los derechos reservados.
+</body>
+</html>
