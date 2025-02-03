@@ -3,116 +3,118 @@
 // strings es clave.
 // La estructura más adecuada es un Trie (Árbol de prefijos).
 
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <unordered_map>
 #include <vector>
-#include <string>
 #include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <list>
+#include <map>
+#include <set>
 
 using namespace std;
 
-// Propuesta para la lectura y carga de peliculas
-void cargarPeliculas(const  string& archivo,  vector<Pelicula>& peliculas, Trie& trie) {
-     ifstream archivoEntrada(archivo);
-     string linea;
-
-    if (!archivoEntrada.is_open()) {
-         cerr << "No se pudo abrir el archivo." <<  endl;
-        return;
-    }
-
-     getline(archivoEntrada, linea); // Leer encabezado
-
-    while ( getline(archivoEntrada, linea)) {
-         stringstream ss(linea);
-        Pelicula pelicula;
-
-         getline(ss, pelicula.imdb_id, ',');
-         getline(ss, pelicula.titulo, ',');
-         getline(ss, pelicula.sinopsis, ',');
-         string tags;
-         getline(ss, tags, ','); // Etiquetas como string
-        pelicula.tags = dividir(tags, '|'); // Suponiendo que las etiquetas están separadas por '|'
-
-        peliculas.push_back(pelicula);
-
-        // Indexar en el Trie
-        for (const  string& palabra : dividirEnPalabras(pelicula.titulo)) {
-            trie.insertar(palabra, pelicula.imdb_id);
-        }
-        for (const  string& palabra : dividirEnPalabras(pelicula.sinopsis)) {
-            trie.insertar(palabra, pelicula.imdb_id);
-        }
-        for (const  string& tag : pelicula.tags) {
-            trie.insertar(tag, pelicula.imdb_id);
-        }
-    }
-}
-
- vector< string> dividirEnPalabras(const  string& texto) {
-     istringstream ss(texto);
-     vector< string> palabras;
-     string palabra;
-    while (ss >> palabra) {
-        palabras.push_back(palabra);
-    }
-    return palabras;
-}
-
-
 struct Pelicula {
-     string imdb_id;
-     string titulo;
-     string sinopsis;
-     vector< string> tags;
+    string imdb_id;
+    string title;
+    string plot_synopsis;
+    string tags;
+    string split;
+    string synopsis_source;
 };
 
-class Trie {
-    struct Nodo {
-         unordered_map<char, Nodo*> hijos;
-         vector< string> peliculas; // IDs de películas
-        bool esPalabra = false;
+// Función para eliminar tildes y convertir a minúsculas
+string normalizarTexto(const string& texto) {
+    string resultado = texto;
+    transform(resultado.begin(), resultado.end(), resultado.begin(), ::tolower);
+
+    unordered_map<char, char> tildes = {
+        {'á', 'a'}, {'é', 'e'}, {'í', 'i'}, {'ó', 'o'}, {'ú', 'u'},
+        {'Á', 'a'}, {'É', 'e'}, {'Í', 'i'}, {'Ó', 'o'}, {'Ú', 'u'}
     };
 
-    Nodo* raiz;
-
-public:
-    Trie() { raiz = new Nodo(); }
-
-    void insertar(const  string& palabra, const  string& pelicula_id) {
-        Nodo* actual = raiz;
-        for (char c : palabra) {
-            if (!actual->hijos[c]) {
-                actual->hijos[c] = new Nodo();
-            }
-            actual = actual->hijos[c];
+    for (char& c : resultado) {
+        if (tildes.count(c)) {
+            c = tildes[c];
         }
-        actual->esPalabra = true;
-        actual->peliculas.push_back(pelicula_id);
+    }
+    
+    return resultado;
+}
+
+// Función para leer CSV y cargar datos
+vector<Pelicula> readCSV(const string& filename) {
+    vector<Pelicula> peliculas;
+    ifstream file(filename);
+
+    if (!file.is_open()) {
+        cerr << "No se pudo abrir el archivo " << filename << endl;
+        return peliculas;
     }
 
-     vector< string> buscar(const  string& prefijo) {
-        Nodo* actual = raiz;
-        for (char c : prefijo) {
-            if (!actual->hijos[c]) return {}; // No hay coincidencias
-            actual = actual->hijos[c];
-        }
-        return recolectarPeliculas(actual);
+    string line;
+    getline(file, line); // Saltar encabezado
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        Pelicula pelicula;
+
+        getline(ss, pelicula.imdb_id, ',');
+        getline(ss, pelicula.title, ',');
+        getline(ss, pelicula.plot_synopsis, ',');
+        getline(ss, pelicula.tags, ',');
+        getline(ss, pelicula.split, ',');
+        getline(ss, pelicula.synopsis_source, ',');
+
+        peliculas.push_back(pelicula);
     }
 
-private:
-     vector< string> recolectarPeliculas(Nodo* nodo) {
-         vector< string> resultados;
-        if (nodo->esPalabra) {
-            resultados.insert(resultados.end(), nodo->peliculas.begin(), nodo->peliculas.end());
+    file.close();
+    return peliculas;
+}
+
+// Función de búsqueda mejorada
+vector<Pelicula> buscarPeliculas(const vector<Pelicula>& peliculas, const string& palabra) {
+    vector<Pelicula> resultados;
+    string palabra_normalizada = normalizarTexto(palabra);
+
+    for (const auto& pelicula : peliculas) {
+        string title_normalizado = normalizarTexto(pelicula.title);
+        string synopsis_normalizado = normalizarTexto(pelicula.plot_synopsis);
+
+        if (title_normalizado.find(palabra_normalizada) != string::npos ||
+            synopsis_normalizado.find(palabra_normalizada) != string::npos) {
+            resultados.push_back(pelicula);
         }
-        for (auto& hijo : nodo->hijos) {
-            auto subresultados = recolectarPeliculas(hijo.second);
-            resultados.insert(resultados.end(), subresultados.begin(), subresultados.end());
-        }
-        return resultados;
     }
-};
+
+    return resultados;
+}
+
+int main() {
+    string filename = "mpst_full_data.csv";
+    vector<Pelicula> peliculas = readCSV(filename);
+
+    string palabra;
+    cout << "Introduce una palabra para buscar: ";
+    cin >> palabra;
+
+    vector<Pelicula> resultados = buscarPeliculas(peliculas, palabra);
+
+    if (!resultados.empty()) {
+        cout << "\nPelículas encontradas:\n";
+        for (const auto& pelicula : resultados) {
+            cout << "IMDB ID: " << pelicula.imdb_id
+                 << ", Title: " << pelicula.title
+                 << ", Plot Synopsis: " << pelicula.plot_synopsis
+                 << "\n--------------------------------------\n";
+        }
+    } else {
+        cout << "No se encontraron películas con la palabra proporcionada.\n";
+    }
+
+    return 0;
+}
+
