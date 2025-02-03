@@ -7,6 +7,7 @@ Programming III Proyect
 | --------------------- | ----------------- | ----------------- | ----------------- |
 | Planificación semanal | Retroalimentación | Reunión y Trabajo | Reunión y Trabajo |
 | 10:00am-1:00pm        | 4pm-adelante      | 10:30am-6:00pm    | 9:00am-6:00pm     |
+
 # Repartición inicial del proyecto:
 Abel: Lectura y escritura de .csv. - Buen manejo de Git y Github
 
