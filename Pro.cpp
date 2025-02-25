@@ -88,6 +88,14 @@ private:
     vector<pair<string, Pelicula>> resultados;
     mutex mtx;
     Trie trie;
+    vector<string> historial;  // Historial de búsquedas
+
+    // Hacer el constructor privado para asegurar que solo haya una instancia
+    GestorPeliculas() {}
+
+    // Asegurar que la clase no sea copiable ni asignable
+    GestorPeliculas(const GestorPeliculas&) = delete;
+    GestorPeliculas& operator=(const GestorPeliculas&) = delete;
 
     int count_occurrences(const string &text, const string &word) {
         int count = 0;
@@ -100,6 +108,12 @@ private:
     }
 
 public:
+    // Método para obtener la instancia única
+    static GestorPeliculas& getInstance() {
+        static GestorPeliculas instance;  // Instancia única
+        return instance;
+    }
+
     void agregar_pelicula(const Pelicula &pelicula) {
         peliculas[pelicula.imdb_id] = pelicula;
         vector<string> palabrasTitulo = dividir(pelicula.titulo, ' ');
@@ -140,8 +154,20 @@ public:
         }
     }
 
+    void mostrar_historial() {
+        if (historial.empty()) {
+            cout << "No hay historial de busquedas." << endl;
+        } else {
+            cout << "Historial de busquedas:" << endl;
+            for (const auto &busqueda : historial) {
+                cout << "- " << busqueda << endl;
+            }
+        }
+    }
+
     void buscar_pelicula(const string &termino) {
         resultados.clear();
+        historial.push_back(termino);  // Agregar la búsqueda al historial
         vector<string> palabras = dividir(termino, ' ');
         unordered_set<string> interseccion;
         bool first = true;
@@ -301,15 +327,19 @@ public:
 
 int main() {
     string nombre_archivo = "cleaned_data.csv";
-    GestorPeliculas gestor;
+
+    // Usando el Singleton
+    GestorPeliculas& gestor = GestorPeliculas::getInstance();
     vector<Pelicula> peliculas = CargadorCSV::cargar_csv(nombre_archivo);
     for (const auto &pelicula : peliculas)
         gestor.agregar_pelicula(pelicula);
+
     int opcion;
     while (true) {
         cout << "\n1. Ver peliculas en Ver Mas Tarde" << endl;
         cout << "2. Ver peliculas Likeadas" << endl;
         cout << "3. Buscar peliculas" << endl;
+        cout << "4. Ver historial de busquedas" << endl;  // Nueva opción en el menú
         cout << "0. Salir" << endl;
         cout << "Seleccione una opcion: ";
         cin >> opcion;
@@ -325,6 +355,8 @@ int main() {
             cin.ignore();
             getline(cin, busqueda);
             gestor.buscar_pelicula(normalizar_texto(busqueda));
+        } else if (opcion == 4) {  // Ver historial
+            gestor.mostrar_historial();
         }
     }
     return 0;

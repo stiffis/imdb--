@@ -3,4 +3,4 @@ project(ProyectoProgra3)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ProyectoProgra3 main.cpp)
+add_executable(ProyectoProgra3 Pro.cpp)
