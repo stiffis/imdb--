@@ -1,0 +1,331 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <map>
+#include <unordered_set>
+#include <unordered_map>
+#include <algorithm>
+#include <thread>
+#include <mutex>
+#include <future>
+
+using namespace std;
+
+string normalizar_texto(const string &texto) {
+    string resultado;
+    for (char c : texto) {
+        c = tolower(c);
+        if (isalnum(c) || isspace(c))
+            resultado.push_back(c);
+    }
+    return resultado;
+}
+
+vector<string> dividir(const string &cadena, char delimitador) {
+    vector<string> tokens;
+    stringstream ss(cadena);
+    string token;
+    while(getline(ss, token, delimitador))
+        tokens.push_back(normalizar_texto(token));
+    return tokens;
+}
+
+class TrieNode {
+public:
+    unordered_map<char, TrieNode*> children;
+    unordered_set<string> movieIds;
+    bool isEndOfWord;
+    TrieNode() : isEndOfWord(false) {}
+};
+
+class Trie {
+private:
+    TrieNode* root;
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+    ~Trie() {
+    }
+    void insert(const string &word, const string &movieId) {
+        TrieNode* node = root;
+        for (char c : word) {
+            if (node->children.find(c) == node->children.end())
+                node->children[c] = new TrieNode();
+            node = node->children[c];
+        }
+        node->isEndOfWord = true;
+        node->movieIds.insert(movieId);
+    }
+    unordered_set<string> search(const string &word) {
+        TrieNode* node = root;
+        for (char c : word) {
+            if (node->children.find(c) == node->children.end())
+                return unordered_set<string>();
+            node = node->children[c];
+        }
+        return (node->isEndOfWord) ? node->movieIds : unordered_set<string>();
+    }
+};
+
+class Pelicula {
+public:
+    string imdb_id;
+    string titulo;
+    string sinopsis;
+    vector<string> etiquetas;
+    Pelicula() : imdb_id(""), titulo(""), sinopsis(""), etiquetas() {}
+    Pelicula(string id, string t, string s, vector<string> e)
+        : imdb_id(move(id)), titulo(move(t)), sinopsis(move(s)), etiquetas(move(e)) {}
+};
+
+class GestorPeliculas {
+private:
+    map<string, Pelicula> peliculas;
+    unordered_set<string> likes;
+    vector<string> verMasTarde;
+    vector<pair<string, Pelicula>> resultados;
+    mutex mtx;
+    Trie trie;
+
+    int count_occurrences(const string &text, const string &word) {
+        int count = 0;
+        size_t pos = 0;
+        while ((pos = text.find(word, pos)) != string::npos) {
+            count++;
+            pos += word.length();
+        }
+        return count;
+    }
+
+public:
+    void agregar_pelicula(const Pelicula &pelicula) {
+        peliculas[pelicula.imdb_id] = pelicula;
+        vector<string> palabrasTitulo = dividir(pelicula.titulo, ' ');
+        for (const auto &palabra : palabrasTitulo)
+            if (!palabra.empty())
+                trie.insert(palabra, pelicula.imdb_id);
+
+        vector<string> palabrasSinopsis = dividir(pelicula.sinopsis, ' ');
+        for (const auto &palabra : palabrasSinopsis)
+            if (!palabra.empty())
+                trie.insert(palabra, pelicula.imdb_id);
+    }
+
+    void agregar_like(const string &imdb_id) {
+        likes.insert(imdb_id);
+        cout << "Pelicula con IMDB ID " << imdb_id << " agregada a Likes." << endl;
+    }
+    void agregar_ver_mas_tarde(const string &imdb_id) {
+        verMasTarde.push_back(imdb_id);
+        cout << "Pelicula con IMDB ID " << imdb_id << " agregada a Ver Mas Tarde." << endl;
+    }
+    void mostrar_likes() {
+        if (likes.empty())
+            cout << "No tienes peliculas en Likes." << endl;
+        else {
+            cout << "Peliculas en Likes:" << endl;
+            for (const auto &id : likes)
+                cout << "- " << peliculas[id].titulo << " (IMDB ID: " << id << ")" << endl;
+        }
+    }
+    void mostrar_ver_mas_tarde() {
+        if (verMasTarde.empty())
+            cout << "No tienes peliculas en Ver Mas Tarde." << endl;
+        else {
+            cout << "Peliculas en Ver Mas Tarde:" << endl;
+            for (const auto &id : verMasTarde)
+                cout << "- " << peliculas[id].titulo << " (IMDB ID: " << id << ")" << endl;
+        }
+    }
+
+    void buscar_pelicula(const string &termino) {
+        resultados.clear();
+        vector<string> palabras = dividir(termino, ' ');
+        unordered_set<string> interseccion;
+        bool first = true;
+
+        vector<pair<string, Pelicula>> resultadosTitulo;
+        vector<pair<string, Pelicula>> resultadosOtros;
+
+        for (const auto &palabra : palabras) {
+            unordered_set<string> ids = trie.search(palabra);
+            if (first) {
+                interseccion = ids;
+                first = false;
+            } else {
+                unordered_set<string> temp;
+                for (const auto &id : interseccion)
+                    if (ids.find(id) != ids.end())
+                        temp.insert(id);
+                interseccion = temp;
+            }
+        }
+
+        for (const auto &id : interseccion) {
+            if (peliculas.find(id) != peliculas.end()) {
+                const auto &p = peliculas.at(id);
+
+                bool encontradoEnTitulo = false;
+                for (const auto &palabra : palabras) {
+                    if (normalizar_texto(p.titulo).find(palabra) != string::npos) {
+                        encontradoEnTitulo = true;
+                        break;
+                    }
+                }
+
+                if (encontradoEnTitulo) {
+                    resultadosTitulo.push_back({id, p});
+                } else {
+                    resultadosOtros.push_back({id, p});
+                }
+            }
+        }
+
+        resultados.insert(resultados.end(), resultadosTitulo.begin(), resultadosTitulo.end());
+        resultados.insert(resultados.end(), resultadosOtros.begin(), resultadosOtros.end());
+
+        if (resultados.empty()) {
+            cout << "No se encontraron resultados para '" << termino << "'." << endl;
+            return;
+        }
+
+        cout << "Desea filtrar los resultados por genero? (s/n): ";
+        string respGenero;
+        cin >> respGenero;
+        if(respGenero == "s" || respGenero == "si") {
+            cout << "Ingrese el genero: ";
+            string genero;
+            cin.ignore();
+            getline(cin, genero);
+            genero = normalizar_texto(genero);
+            vector<pair<string, Pelicula>> resultadosGenero;
+            for (const auto &res : resultados) {
+                bool enc = false;
+                for (const auto &tag : res.second.etiquetas) {
+                    if (tag.find(genero) != string::npos) {
+                        enc = true;
+                        break;
+                    }
+                }
+                if (enc)
+                    resultadosGenero.push_back(res);
+            }
+            if(resultadosGenero.empty()){
+                cout << "No se encontraron peliculas para el genero '" << genero << "'." << endl;
+                return;
+            }
+            resultados = resultadosGenero;
+        }
+
+        size_t pagina = 0;
+        size_t total_paginas = (resultados.size() + 4) / 5;
+        while (true) {
+            size_t inicio = pagina * 5;
+            size_t fin = min(inicio + 5, resultados.size());
+            cout << "\nMostrando pagina " << pagina + 1 << " de " << total_paginas << endl;
+            for (size_t i = inicio; i < fin; ++i)
+                cout << i + 1 << ". " << resultados[i].second.titulo << endl;
+            cout << "\nDesea ver mas resultados? (Ingrese 'si' para mostrar, o el numero de la opcion a ver, o 0 para salir): ";
+            string respuesta;
+            cin >> respuesta;
+            if (respuesta == "0")
+                break;
+            if (respuesta == "si") {
+                if (++pagina >= total_paginas) {
+                    cout << "No hay mas resultados." << endl;
+                    break;
+                }
+            } else {
+                int seleccion = stoi(respuesta);
+                if (seleccion >= 1 && seleccion <= static_cast<int>(resultados.size())) {
+                    const auto &p = resultados[seleccion - 1].second;
+                    cout << "\nDetalles de la pelicula:\n";
+                    cout << "Titulo: " << p.titulo << "\nSinopsis: " << p.sinopsis << "\nEtiquetas: ";
+                    for (const auto &et : p.etiquetas)
+                        cout << et << " ";
+                    cout << "\n\n";
+
+                    int contadorTitulo = 0, contadorSinopsis = 0;
+                    for (const auto &palabra : palabras) {
+                        contadorTitulo += count_occurrences(normalizar_texto(p.titulo), palabra);
+                        contadorSinopsis += count_occurrences(normalizar_texto(p.sinopsis), palabra);
+                    }
+                    cout << "Palabra(s) buscada(s) en el titulo: " << contadorTitulo << " vez/veces." << endl;
+                    cout << "Palabra(s) buscada(s) en la sinopsis: " << contadorSinopsis << " vez/veces." << endl;
+
+                    cout << "\nOpciones:\n1. Agregar a Likes\n2. Agregar a Ver mas tarde\n0. Volver a la lista\n";
+                    int opcion;
+                    cin >> opcion;
+                    if (opcion == 1)
+                        agregar_like(resultados[seleccion - 1].first);
+                    else if (opcion == 2)
+                        agregar_ver_mas_tarde(resultados[seleccion - 1].first);
+                } else
+                    cout << "Seleccion invalida. Intente nuevamente.\n";
+            }
+        }
+    }
+};
+
+class CargadorCSV {
+public:
+    static vector<Pelicula> cargar_csv(const string &nombre_archivo) {
+        ifstream archivo(nombre_archivo);
+        vector<Pelicula> peliculas;
+        string linea;
+        if (!archivo.is_open()) {
+            cerr << "Error: No se pudo abrir el archivo. Saldremos del programa" << endl;
+            terminate();
+        }
+        getline(archivo, linea);
+        while (getline(archivo, linea)) {
+            stringstream ss(linea);
+            string imdb_id, titulo, sinopsis, etiquetas;
+            getline(ss, imdb_id, ',');
+            getline(ss, titulo, ',');
+            getline(ss, sinopsis, ',');
+            getline(ss, etiquetas, ',');
+            vector<string> etiquetas_procesadas = dividir(etiquetas, ',');
+            Pelicula pelicula(imdb_id,
+                normalizar_texto(titulo),
+                normalizar_texto(sinopsis),
+                etiquetas_procesadas);
+            peliculas.push_back(pelicula);
+        }
+        archivo.close();
+        return peliculas;
+    }
+};
+
+int main() {
+    string nombre_archivo = "cleaned_data.csv";
+    GestorPeliculas gestor;
+    vector<Pelicula> peliculas = CargadorCSV::cargar_csv(nombre_archivo);
+    for (const auto &pelicula : peliculas)
+        gestor.agregar_pelicula(pelicula);
+    int opcion;
+    while (true) {
+        cout << "\n1. Ver peliculas en Ver Mas Tarde" << endl;
+        cout << "2. Ver peliculas Likeadas" << endl;
+        cout << "3. Buscar peliculas" << endl;
+        cout << "0. Salir" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        if (opcion == 0)
+            break;
+        if (opcion == 1)
+            gestor.mostrar_ver_mas_tarde();
+        else if (opcion == 2)
+            gestor.mostrar_likes();
+        else if (opcion == 3) {
+            cout << "Ingrese el termino de busqueda: ";
+            string busqueda;
+            cin.ignore();
+            getline(cin, busqueda);
+            gestor.buscar_pelicula(normalizar_texto(busqueda));
+        }
+    }
+    return 0;
+}
