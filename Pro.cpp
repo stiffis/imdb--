@@ -9,7 +9,6 @@
 #include <thread>
 #include <mutex>
 #include <future>
-
 using namespace std;
 
 string normalizar_texto(const string &texto) {
@@ -43,11 +42,8 @@ class Trie {
 private:
     TrieNode* root;
 public:
-    Trie() {
-        root = new TrieNode();
-    }
-    ~Trie() {
-    }
+    Trie() { root = new TrieNode(); }
+    ~Trie() {}
     void insert(const string &word, const string &movieId) {
         TrieNode* node = root;
         for (char c : word) {
@@ -80,6 +76,46 @@ public:
         : imdb_id(move(id)), titulo(move(t)), sinopsis(move(s)), etiquetas(move(e)) {}
 };
 
+// Definición del patrón Decorator para la visualización de películas
+class MovieDisplay {
+public:
+    virtual void display(const Pelicula &p) = 0;
+    virtual ~MovieDisplay() {}
+};
+
+class BasicMovieDisplay : public MovieDisplay {
+public:
+    void display(const Pelicula &p) override {
+        cout << "\nDetalles de la pelicula:\n";
+        cout << "Titulo: " << p.titulo << "\nSinopsis: " << p.sinopsis << "\nEtiquetas: ";
+        if (p.etiquetas.empty())
+            cout << "Sin generos";
+        else {
+            for (const auto &et : p.etiquetas)
+                cout << et << " ";
+        }
+        cout << "\n";
+    }
+};
+
+class MovieDisplayDecorator : public MovieDisplay {
+protected:
+    MovieDisplay* wrapped;
+public:
+    MovieDisplayDecorator(MovieDisplay* m) : wrapped(m) {}
+    virtual ~MovieDisplayDecorator() { delete wrapped; }
+    void display(const Pelicula &p) override { wrapped->display(p); }
+};
+
+class ExtendedMovieDisplay : public MovieDisplayDecorator {
+public:
+    ExtendedMovieDisplay(MovieDisplay* m) : MovieDisplayDecorator(m) {}
+    void display(const Pelicula &p) override {
+        MovieDisplayDecorator::display(p);
+        cout << "IMDB ID: " << p.imdb_id << "\n";
+    }
+};
+
 class GestorPeliculas {
 private:
     map<string, Pelicula> peliculas;
@@ -88,12 +124,9 @@ private:
     vector<pair<string, Pelicula>> resultados;
     mutex mtx;
     Trie trie;
-    vector<string> historial;  // Historial de búsquedas
+    vector<string> historial;
 
-    // Hacer el constructor privado para asegurar que solo haya una instancia
     GestorPeliculas() {}
-
-    // Asegurar que la clase no sea copiable ni asignable
     GestorPeliculas(const GestorPeliculas&) = delete;
     GestorPeliculas& operator=(const GestorPeliculas&) = delete;
 
@@ -106,27 +139,22 @@ private:
         }
         return count;
     }
-
 public:
-    // Método para obtener la instancia única
     static GestorPeliculas& getInstance() {
-        static GestorPeliculas instance;  // Instancia única
+        static GestorPeliculas instance;
         return instance;
     }
-
     void agregar_pelicula(const Pelicula &pelicula) {
         peliculas[pelicula.imdb_id] = pelicula;
         vector<string> palabrasTitulo = dividir(pelicula.titulo, ' ');
         for (const auto &palabra : palabrasTitulo)
             if (!palabra.empty())
                 trie.insert(palabra, pelicula.imdb_id);
-
         vector<string> palabrasSinopsis = dividir(pelicula.sinopsis, ' ');
         for (const auto &palabra : palabrasSinopsis)
             if (!palabra.empty())
                 trie.insert(palabra, pelicula.imdb_id);
     }
-
     void agregar_like(const string &imdb_id) {
         likes.insert(imdb_id);
         cout << "Pelicula con IMDB ID " << imdb_id << " agregada a Likes." << endl;
@@ -153,34 +181,27 @@ public:
                 cout << "- " << peliculas[id].titulo << " (IMDB ID: " << id << ")" << endl;
         }
     }
-
     void mostrar_historial() {
-        if (historial.empty()) {
+        if (historial.empty())
             cout << "No hay historial de busquedas." << endl;
-        } else {
+        else {
             cout << "Historial de busquedas:" << endl;
-            for (const auto &busqueda : historial) {
+            for (const auto &busqueda : historial)
                 cout << "- " << busqueda << endl;
-            }
         }
     }
-
     void buscar_pelicula(const string &termino) {
         resultados.clear();
-        historial.push_back(termino);  // Agregar la búsqueda al historial
+        historial.push_back(termino);
         vector<string> palabras = dividir(termino, ' ');
         unordered_set<string> interseccion;
         bool first = true;
-
         vector<pair<string, Pelicula>> resultadosTitulo;
         vector<pair<string, Pelicula>> resultadosOtros;
-
         for (const auto &palabra : palabras) {
             unordered_set<string> ids = trie.search(palabra);
-            if (first) {
-                interseccion = ids;
-                first = false;
-            } else {
+            if (first) { interseccion = ids; first = false; }
+            else {
                 unordered_set<string> temp;
                 for (const auto &id : interseccion)
                     if (ids.find(id) != ids.end())
@@ -188,11 +209,9 @@ public:
                 interseccion = temp;
             }
         }
-
         for (const auto &id : interseccion) {
             if (peliculas.find(id) != peliculas.end()) {
                 const auto &p = peliculas.at(id);
-
                 bool encontradoEnTitulo = false;
                 for (const auto &palabra : palabras) {
                     if (normalizar_texto(p.titulo).find(palabra) != string::npos) {
@@ -200,23 +219,18 @@ public:
                         break;
                     }
                 }
-
-                if (encontradoEnTitulo) {
+                if (encontradoEnTitulo)
                     resultadosTitulo.push_back({id, p});
-                } else {
+                else
                     resultadosOtros.push_back({id, p});
-                }
             }
         }
-
         resultados.insert(resultados.end(), resultadosTitulo.begin(), resultadosTitulo.end());
         resultados.insert(resultados.end(), resultadosOtros.begin(), resultadosOtros.end());
-
         if (resultados.empty()) {
             cout << "No se encontraron resultados para '" << termino << "'." << endl;
             return;
         }
-
         cout << "Desea filtrar los resultados por genero? (s/n): ";
         string respGenero;
         cin >> respGenero;
@@ -230,10 +244,7 @@ public:
             for (const auto &res : resultados) {
                 bool enc = false;
                 for (const auto &tag : res.second.etiquetas) {
-                    if (tag.find(genero) != string::npos) {
-                        enc = true;
-                        break;
-                    }
+                    if (tag.find(genero) != string::npos) { enc = true; break; }
                 }
                 if (enc)
                     resultadosGenero.push_back(res);
@@ -244,7 +255,6 @@ public:
             }
             resultados = resultadosGenero;
         }
-
         size_t pagina = 0;
         size_t total_paginas = (resultados.size() + 4) / 5;
         while (true) {
@@ -267,11 +277,9 @@ public:
                 int seleccion = stoi(respuesta);
                 if (seleccion >= 1 && seleccion <= static_cast<int>(resultados.size())) {
                     const auto &p = resultados[seleccion - 1].second;
-                    cout << "\nDetalles de la pelicula:\n";
-                    cout << "Titulo: " << p.titulo << "\nSinopsis: " << p.sinopsis << "\nEtiquetas: ";
-                    for (const auto &et : p.etiquetas)
-                        cout << et << " ";
-                    cout << "\n\n";
+                    MovieDisplay* display = new ExtendedMovieDisplay(new BasicMovieDisplay());
+                    display->display(p);
+                    delete display;
 
                     int contadorTitulo = 0, contadorSinopsis = 0;
                     for (const auto &palabra : palabras) {
@@ -314,10 +322,7 @@ public:
             getline(ss, sinopsis, ',');
             getline(ss, etiquetas, ',');
             vector<string> etiquetas_procesadas = dividir(etiquetas, ',');
-            Pelicula pelicula(imdb_id,
-                normalizar_texto(titulo),
-                normalizar_texto(sinopsis),
-                etiquetas_procesadas);
+            Pelicula pelicula(imdb_id, normalizar_texto(titulo), normalizar_texto(sinopsis), etiquetas_procesadas);
             peliculas.push_back(pelicula);
         }
         archivo.close();
@@ -327,19 +332,16 @@ public:
 
 int main() {
     string nombre_archivo = "cleaned_data.csv";
-
-    // Usando el Singleton
     GestorPeliculas& gestor = GestorPeliculas::getInstance();
     vector<Pelicula> peliculas = CargadorCSV::cargar_csv(nombre_archivo);
     for (const auto &pelicula : peliculas)
         gestor.agregar_pelicula(pelicula);
-
     int opcion;
     while (true) {
         cout << "\n1. Ver peliculas en Ver Mas Tarde" << endl;
         cout << "2. Ver peliculas Likeadas" << endl;
         cout << "3. Buscar peliculas" << endl;
-        cout << "4. Ver historial de busquedas" << endl;  // Nueva opción en el menú
+        cout << "4. Ver historial de busquedas" << endl;
         cout << "0. Salir" << endl;
         cout << "Seleccione una opcion: ";
         cin >> opcion;
@@ -355,7 +357,7 @@ int main() {
             cin.ignore();
             getline(cin, busqueda);
             gestor.buscar_pelicula(normalizar_texto(busqueda));
-        } else if (opcion == 4) {  // Ver historial
+        } else if (opcion == 4) {
             gestor.mostrar_historial();
         }
     }
