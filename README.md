@@ -9,7 +9,7 @@
 <a href="#Windows"><img src="https://img.shields.io/badge/os-windows-yellowgreen">
 <br>
 <h1 aling=center>
-<a href="logo"><img src="https://img.shields.io/badge/IMDb--%20-blue"></a>
+<a href="logo"><img src="/Pasted image 20250226141439.png"></a>
 <br>
 <a href="https://github.com/stiffis"><img src="https://img.shields.io/badge/lead-stiffis-lightblue"></a>
 <a href="https://github.com/CoolnsX"><img src="https://img.shields.io/badge/maintainer-abel-blue"></a>
