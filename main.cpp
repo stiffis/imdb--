@@ -37,7 +37,6 @@ string normalizarTexto(const string& texto) {
     
     return resultado;
 }
-
 // Función para leer el CSV
 vector<Pelicula> readCSV(const string& filename) {
     vector<Pelicula> peliculas;
