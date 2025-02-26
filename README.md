@@ -1,14 +1,18 @@
 # Programación III: Proyecto Final (2025-0)
+## Supported OS
 <p align=center>
 <br>
-<a href="Supported OS"</a>
 <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="#Linux"><img src="https://img.shields.io/badge/os-linux-brightgreen">
 <a href="#MacOS"><img src="https://img.shields.io/badge/os-mac-brightgreen">
 <a href="#Android"><img src="https://img.shields.io/badge/os-android-brightgreen">
 <a href="#Windows"><img src="https://img.shields.io/badge/os-windows-yellowgreen">
 <br>
-
+</p>
+<p aling=center>
+<a href="https://github.com/stiffis"><img src="https://img.shields.io/badge/lead-port19x-lightblue"></a>
+<a href="https://github.com/CoolnsX"><img src="https://img.shields.io/badge/maintainer-CoolnsX-blue"></a>
+<a href="https://github.com/justchokingaround"><img src="https://img.shields.io/badge/maintainer-justchokingaround-blue"></a>
 </p>
 
 ---
