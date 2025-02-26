@@ -1,7 +1,7 @@
 # Programación III: Proyecto Final (2025-0)
 <p align=center>
 <br>
-<a href="Supported OS"><img src="https://img.shields.io/badge/os-supported-brightgreen"></a>
+<a href="Supported OS"</a>
 <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="#Linux"><img src="https://img.shields.io/badge/os-linux-brightgreen">
 <a href="#MacOS"><img src="https://img.shields.io/badge/os-mac-brightgreen">
