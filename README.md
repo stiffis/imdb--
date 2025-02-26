@@ -1,6 +1,7 @@
-# Programación III: Proyecto Final (2026-0)
+# Programación III: Proyecto Final (2025-0)
 <p align=center>
 <br>
+<a href="Supported OS"><img src="https://img.shields.io/badge/os-supported-brightgreen"></a>
 <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="#Linux"><img src="https://img.shields.io/badge/os-linux-brightgreen">
 <a href="#MacOS"><img src="https://img.shields.io/badge/os-mac-brightgreen">
@@ -8,10 +9,11 @@
 <a href="#Windows"><img src="https://img.shields.io/badge/os-windows-yellowgreen">
 <br>
 
+</p>
 ---
 ## Integrantes: 
 - Marco Antonio Galindo Bendezú (202310440)
-- 
+- Yuri
 - Steve Andy Ildefonso Santos (202410402)
 ## Plataforma de Streaming
 ![[Pasted image 20250127110130.png]]
