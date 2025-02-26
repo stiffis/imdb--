@@ -76,7 +76,6 @@ public:
         : imdb_id(move(id)), titulo(move(t)), sinopsis(move(s)), etiquetas(move(e)) {}
 };
 
-// Definición del patrón Decorator para la visualización de películas
 class MovieDisplay {
 public:
     virtual void display(const Pelicula &p) = 0;
@@ -116,34 +115,44 @@ public:
     }
 };
 
+class Memento {
+public:
+    vector<string> likes;
+    vector<string> verMasTarde;
+    vector<string> historial;
+    vector<pair<string, Pelicula>> resultados;
+    Memento(const vector<string>& likes, const vector<string>& verMasTarde,
+            const vector<string>& historial, const vector<pair<string, Pelicula>>& resultados)
+        : likes(likes), verMasTarde(verMasTarde), historial(historial), resultados(resultados) {}
+};
+
 class GestorPeliculas {
 private:
     map<string, Pelicula> peliculas;
     unordered_set<string> likes;
     vector<string> verMasTarde;
     vector<pair<string, Pelicula>> resultados;
-    mutex mtx;
-    Trie trie;
     vector<string> historial;
+    Trie trie;
 
-    GestorPeliculas() {}
-    GestorPeliculas(const GestorPeliculas&) = delete;
-    GestorPeliculas& operator=(const GestorPeliculas&) = delete;
-
-    int count_occurrences(const string &text, const string &word) {
-        int count = 0;
-        size_t pos = 0;
-        while ((pos = text.find(word, pos)) != string::npos) {
-            count++;
-            pos += word.length();
-        }
-        return count;
-    }
 public:
     static GestorPeliculas& getInstance() {
         static GestorPeliculas instance;
         return instance;
     }
+
+    Memento* createMemento() {
+        return new Memento({likes.begin(), likes.end()},
+                           verMasTarde, historial, resultados);
+    }
+
+    void restoreMemento(Memento* memento) {
+        likes = unordered_set<string>(memento->likes.begin(), memento->likes.end());
+        verMasTarde = memento->verMasTarde;
+        historial = memento->historial;
+        resultados = memento->resultados;
+    }
+
     void agregar_pelicula(const Pelicula &pelicula) {
         peliculas[pelicula.imdb_id] = pelicula;
         vector<string> palabrasTitulo = dividir(pelicula.titulo, ' ');
@@ -155,14 +164,17 @@ public:
             if (!palabra.empty())
                 trie.insert(palabra, pelicula.imdb_id);
     }
+
     void agregar_like(const string &imdb_id) {
         likes.insert(imdb_id);
         cout << "Pelicula con IMDB ID " << imdb_id << " agregada a Likes." << endl;
     }
+
     void agregar_ver_mas_tarde(const string &imdb_id) {
         verMasTarde.push_back(imdb_id);
         cout << "Pelicula con IMDB ID " << imdb_id << " agregada a Ver Mas Tarde." << endl;
     }
+
     void mostrar_likes() {
         if (likes.empty())
             cout << "No tienes peliculas en Likes." << endl;
@@ -172,6 +184,7 @@ public:
                 cout << "- " << peliculas[id].titulo << " (IMDB ID: " << id << ")" << endl;
         }
     }
+
     void mostrar_ver_mas_tarde() {
         if (verMasTarde.empty())
             cout << "No tienes peliculas en Ver Mas Tarde." << endl;
@@ -181,6 +194,7 @@ public:
                 cout << "- " << peliculas[id].titulo << " (IMDB ID: " << id << ")" << endl;
         }
     }
+
     void mostrar_historial() {
         if (historial.empty())
             cout << "No hay historial de busquedas." << endl;
@@ -190,6 +204,7 @@ public:
                 cout << "- " << busqueda << endl;
         }
     }
+
     void buscar_pelicula(const string &termino) {
         resultados.clear();
         historial.push_back(termino);
@@ -280,22 +295,6 @@ public:
                     MovieDisplay* display = new ExtendedMovieDisplay(new BasicMovieDisplay());
                     display->display(p);
                     delete display;
-
-                    int contadorTitulo = 0, contadorSinopsis = 0;
-                    for (const auto &palabra : palabras) {
-                        contadorTitulo += count_occurrences(normalizar_texto(p.titulo), palabra);
-                        contadorSinopsis += count_occurrences(normalizar_texto(p.sinopsis), palabra);
-                    }
-                    cout << "Palabra(s) buscada(s) en el titulo: " << contadorTitulo << " vez/veces." << endl;
-                    cout << "Palabra(s) buscada(s) en la sinopsis: " << contadorSinopsis << " vez/veces." << endl;
-
-                    cout << "\nOpciones:\n1. Agregar a Likes\n2. Agregar a Ver mas tarde\n0. Volver a la lista\n";
-                    int opcion;
-                    cin >> opcion;
-                    if (opcion == 1)
-                        agregar_like(resultados[seleccion - 1].first);
-                    else if (opcion == 2)
-                        agregar_ver_mas_tarde(resultados[seleccion - 1].first);
                 } else
                     cout << "Seleccion invalida. Intente nuevamente.\n";
             }
@@ -333,15 +332,26 @@ public:
 int main() {
     string nombre_archivo = "cleaned_data.csv";
     GestorPeliculas& gestor = GestorPeliculas::getInstance();
-    vector<Pelicula> peliculas = CargadorCSV::cargar_csv(nombre_archivo);
-    for (const auto &pelicula : peliculas)
-        gestor.agregar_pelicula(pelicula);
+
+    thread cargadorThread([](const string& archivo, GestorPeliculas& gestor){
+        vector<Pelicula> peliculas = CargadorCSV::cargar_csv(archivo);
+        for (const auto &pelicula : peliculas) {
+            gestor.agregar_pelicula(pelicula);
+        }
+    }, nombre_archivo, std::ref(gestor));
+
+    cargadorThread.join();
+
+    vector<Memento*> mementos;
     int opcion;
+
     while (true) {
         cout << "\n1. Ver peliculas en Ver Mas Tarde" << endl;
         cout << "2. Ver peliculas Likeadas" << endl;
         cout << "3. Buscar peliculas" << endl;
         cout << "4. Ver historial de busquedas" << endl;
+        cout << "5. Guardar estado" << endl;
+        cout << "6. Restaurar estado" << endl;
         cout << "0. Salir" << endl;
         cout << "Seleccione una opcion: ";
         cin >> opcion;
@@ -359,7 +369,19 @@ int main() {
             gestor.buscar_pelicula(normalizar_texto(busqueda));
         } else if (opcion == 4) {
             gestor.mostrar_historial();
+        } else if (opcion == 5) {
+            mementos.push_back(gestor.createMemento());
+            cout << "Estado guardado." << endl;
+        } else if (opcion == 6) {
+            if (mementos.empty()) {
+                cout << "No hay estados guardados." << endl;
+            } else {
+                gestor.restoreMemento(mementos.back());
+                mementos.pop_back();
+                cout << "Estado restaurado." << endl;
+            }
         }
     }
+
     return 0;
 }
