@@ -1,5 +1,5 @@
 # Programación III: Proyecto Final (2025-0)
-## Supported OS
+## Sistemas Operativos Soportados
 <p align=center>
 <br>
 <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
