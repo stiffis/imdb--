@@ -18,7 +18,7 @@
 </p>
 
 <h3 align="center">
-A cli to browse and watch anime (alone AND with friends). This tool scrapes the site <a href="https://allmanga.to/">allmanga.</a>
+A cli to browse and watch anime (alone AND with friends). This tool scrapes the site <a></a>
 </h3>
 
 <h1 align="center">
