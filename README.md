@@ -8,14 +8,23 @@
 <a href="#Android"><img src="https://img.shields.io/badge/os-android-brightgreen">
 <a href="#Windows"><img src="https://img.shields.io/badge/os-windows-yellowgreen">
 <br>
-<h1 aling=center>
+<h1 align="center">
 <a href="logo"><img src="/Pasted image 20250226141439.png"></a>
 <br>
 <a href="https://github.com/stiffis"><img src="https://img.shields.io/badge/lead-stiffis-lightblue"></a>
 <a href="https://github.com/CoolnsX"><img src="https://img.shields.io/badge/maintainer-abel-blue"></a>
 <a href="https://github.com/justchokingaround"><img src="https://img.shields.io/badge/maintainer-marco-blue"></a>
-</h1>
+
 </p>
+
+<h3 align="center">
+A cli to browse and watch anime (alone AND with friends). This tool scrapes the site <a href="https://allmanga.to/">allmanga.</a>
+</h3>
+
+<h1 align="center">
+	Showcase
+</h1>
+
 
 ---
 ## Integrantes: 
