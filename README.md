@@ -1,5 +1,5 @@
 # Programación III: Proyecto Final (2025-0)
-## Sistemas Operativos Soportados
+### Sistemas Operativos Soportados
 <p align=center>
 <br>
 <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
@@ -36,7 +36,7 @@ Un CLI para buscar peliculas, así como sus respectivas sinópsis y géneros <a>
     - [Requisitos de Software](#requisitos-de-software)
     - [Requisitos de Hardware](#requisitos-de-hardware)
 - [Instalación](#instalación)
-- [Uso](#uso)
+- [Manual de Uso](#manual-de-uso)
 - [Documentación](#documentación)
     - [Casos de Uso](#casos-de-uso)
     - [Diagrama de Clases](#diagrama-de-clases)
