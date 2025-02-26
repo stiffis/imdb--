@@ -7,9 +7,38 @@
 #include <unordered_map>
 #include <algorithm>
 #include <thread>
-#include <mutex>
-#include <future>
+#include <limits>
 using namespace std;
+
+void printBox(const string &text) {
+    int len = 0;
+    vector<string> lines;
+    stringstream ss(text);
+    string line;
+    while(getline(ss, line, '\n')) {
+        lines.push_back(line);
+        if (line.size() > len)
+            len = line.size();
+    }
+    string border(len + 4, '-');
+    cout << border << "\n";
+    for(auto &l : lines) {
+        cout << "| " << l;
+        cout << string(len - l.size(), ' ') << " |\n";
+    }
+    cout << border << "\n";
+}
+
+int countOccurrences(const string &text, const string &word) {
+    int count = 0;
+    stringstream ss(text);
+    string token;
+    while (ss >> token) {
+        if (token == word)
+            count++;
+    }
+    return count;
+}
 
 string normalizar_texto(const string &texto) {
     string resultado;
@@ -85,15 +114,17 @@ public:
 class BasicMovieDisplay : public MovieDisplay {
 public:
     void display(const Pelicula &p) override {
-        cout << "\nDetalles de la pelicula:\n";
-        cout << "Titulo: " << p.titulo << "\nSinopsis: " << p.sinopsis << "\nEtiquetas: ";
-        if (p.etiquetas.empty())
+        cout << "\n=== Detalles de la Pelicula ===\n";
+        cout << "Titulo: " << p.titulo << "\n";
+        cout << "Sinopsis: " << p.sinopsis << "\n";
+        cout << "Etiquetas: ";
+        if(p.etiquetas.empty())
             cout << "Sin generos";
         else {
             for (const auto &et : p.etiquetas)
                 cout << et << " ";
         }
-        cout << "\n";
+        cout << "\n============================\n";
     }
 };
 
@@ -246,13 +277,14 @@ public:
             cout << "No se encontraron resultados para '" << termino << "'." << endl;
             return;
         }
-        cout << "Desea filtrar los resultados por genero? (s/n): ";
+        printBox("Desea filtrar los resultados por genero? (s/n): ");
         string respGenero;
         cin >> respGenero;
+        vector<vector<pair<string, Pelicula>>> stackFiltros;
         if(respGenero == "s" || respGenero == "si") {
-            cout << "Ingrese el genero: ";
+            printBox("Ingrese el genero: ");
             string genero;
-            cin.ignore();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, genero);
             genero = normalizar_texto(genero);
             vector<pair<string, Pelicula>> resultadosGenero;
@@ -268,6 +300,7 @@ public:
                 cout << "No se encontraron peliculas para el genero '" << genero << "'." << endl;
                 return;
             }
+            stackFiltros.push_back(resultados);
             resultados = resultadosGenero;
         }
         size_t pagina = 0;
@@ -278,25 +311,76 @@ public:
             cout << "\nMostrando pagina " << pagina + 1 << " de " << total_paginas << endl;
             for (size_t i = inicio; i < fin; ++i)
                 cout << i + 1 << ". " << resultados[i].second.titulo << endl;
-            cout << "\nDesea ver mas resultados? (Ingrese 'si' para mostrar, o el numero de la opcion a ver, o 0 para salir): ";
+            printBox("Opciones:\n'si' PARA SIGUIENTE PAGINA\n'g' PARA FILTRAR POR GENERO\n'r' PARA REMOVER EL ULTIMO FILTRO\n '0' PARA SALIR:");
             string respuesta;
             cin >> respuesta;
             if (respuesta == "0")
                 break;
-            if (respuesta == "si") {
+            else if (respuesta == "si") {
                 if (++pagina >= total_paginas) {
                     cout << "No hay mas resultados." << endl;
                     break;
                 }
-            } else {
+            }
+            else if (respuesta == "g") {
+                printBox("Ingrese el genero para filtrar: ");
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                string nuevoGenero;
+                getline(cin, nuevoGenero);
+                nuevoGenero = normalizar_texto(nuevoGenero);
+                vector<pair<string, Pelicula>> nuevosResultados;
+                for (const auto &res : resultados) {
+                    bool enc = false;
+                    for (const auto &tag : res.second.etiquetas) {
+                        if (tag.find(nuevoGenero) != string::npos) { enc = true; break; }
+                    }
+                    if (enc)
+                        nuevosResultados.push_back(res);
+                }
+                if (nuevosResultados.empty()) {
+                    cout << "No se encontraron peliculas para el genero '" << nuevoGenero << "'." << endl;
+                } else {
+                    stackFiltros.push_back(resultados);
+                    resultados = nuevosResultados;
+                    total_paginas = (resultados.size() + 4) / 5;
+                    pagina = 0;
+                    cout << "Filtrado aplicado. Mostrando nueva lista de resultados:" << endl;
+                }
+            }
+            else if (respuesta == "r") {
+                if (!stackFiltros.empty()) {
+                    resultados = stackFiltros.back();
+                    stackFiltros.pop_back();
+                    total_paginas = (resultados.size() + 4) / 5;
+                    pagina = 0;
+                    cout << "Ultimo filtro removido. Mostrando resultados actualizados:" << endl;
+                } else {
+                    cout << "No hay filtros para remover." << endl;
+                }
+            }
+            else {
                 int seleccion = stoi(respuesta);
                 if (seleccion >= 1 && seleccion <= static_cast<int>(resultados.size())) {
                     const auto &p = resultados[seleccion - 1].second;
                     MovieDisplay* display = new ExtendedMovieDisplay(new BasicMovieDisplay());
                     display->display(p);
                     delete display;
+                    // Mostrar la frecuencia de cada palabra del termino en la pelicula seleccionada.
+                    string combined = p.titulo + " " + p.sinopsis;
+                    cout << "\nFrecuencia de palabras encontradas:" << endl;
+                    for (const auto &w : palabras) {
+                        int freq = countOccurrences(combined, w);
+                        cout << w << ": " << freq << endl;
+                    }
+                    printBox("DESEA DARLE LIKE (1)\nDESEA VERLO MAS TARDE (2)?\nDESEA OMITIR (0)");
+                    int opcionAccion;
+                    cin >> opcionAccion;
+                    if(opcionAccion == 1)
+                        agregar_like(p.imdb_id);
+                    else if(opcionAccion == 2)
+                        agregar_ver_mas_tarde(p.imdb_id);
                 } else
-                    cout << "Seleccion invalida. Intente nuevamente.\n";
+                    cout << "Seleccion invalida. Intente nuevamente." << endl;
             }
         }
     }
@@ -335,25 +419,24 @@ int main() {
 
     thread cargadorThread([](const string& archivo, GestorPeliculas& gestor){
         vector<Pelicula> peliculas = CargadorCSV::cargar_csv(archivo);
-        for (const auto &pelicula : peliculas) {
+        for (const auto &pelicula : peliculas)
             gestor.agregar_pelicula(pelicula);
-        }
-    }, nombre_archivo, std::ref(gestor));
+    }, nombre_archivo, ref(gestor));
 
     cargadorThread.join();
 
     vector<Memento*> mementos;
     int opcion;
-
     while (true) {
-        cout << "\n1. Ver peliculas en Ver Mas Tarde" << endl;
+        cout << "\n=== Menu Principal ===" << endl;
+        cout << "1. Ver peliculas en Ver Mas Tarde" << endl;
         cout << "2. Ver peliculas Likeadas" << endl;
         cout << "3. Buscar peliculas" << endl;
         cout << "4. Ver historial de busquedas" << endl;
         cout << "5. Guardar estado" << endl;
         cout << "6. Restaurar estado" << endl;
         cout << "0. Salir" << endl;
-        cout << "Seleccione una opcion: ";
+        printBox("Seleccione una opcion:");
         cin >> opcion;
         if (opcion == 0)
             break;
@@ -362,9 +445,9 @@ int main() {
         else if (opcion == 2)
             gestor.mostrar_likes();
         else if (opcion == 3) {
-            cout << "Ingrese el termino de busqueda: ";
+            printBox("Ingrese el termino de busqueda:");
             string busqueda;
-            cin.ignore();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, busqueda);
             gestor.buscar_pelicula(normalizar_texto(busqueda));
         } else if (opcion == 4) {
@@ -373,15 +456,14 @@ int main() {
             mementos.push_back(gestor.createMemento());
             cout << "Estado guardado." << endl;
         } else if (opcion == 6) {
-            if (mementos.empty()) {
+            if (mementos.empty())
                 cout << "No hay estados guardados." << endl;
-            } else {
+            else {
                 gestor.restoreMemento(mementos.back());
                 mementos.pop_back();
                 cout << "Estado restaurado." << endl;
             }
         }
     }
-
     return 0;
 }
