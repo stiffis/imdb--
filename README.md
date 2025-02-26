@@ -10,9 +10,9 @@
 <br>
 </p>
 <p aling=center>
-<a href="https://github.com/stiffis"><img src="https://img.shields.io/badge/lead-port19x-lightblue"></a>
-<a href="https://github.com/CoolnsX"><img src="https://img.shields.io/badge/maintainer-CoolnsX-blue"></a>
-<a href="https://github.com/justchokingaround"><img src="https://img.shields.io/badge/maintainer-justchokingaround-blue"></a>
+<a href="https://github.com/stiffis"><img src="https://img.shields.io/badge/lead-stiffis-lightblue"></a>
+<a href="https://github.com/CoolnsX"><img src="https://img.shields.io/badge/maintainer-abel-blue"></a>
+<a href="https://github.com/justchokingaround"><img src="https://img.shields.io/badge/maintainer-marco-blue"></a>
 </p>
 
 ---
