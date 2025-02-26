@@ -10,7 +10,7 @@
 <br>
 <h1 aling=center>
 <a href="logo"><img src="https://img.shields.io/badge/IMDb--%20-blue"></a>
-
+</h1>
 <a href="https://github.com/stiffis"><img src="https://img.shields.io/badge/lead-stiffis-lightblue"></a>
 <a href="https://github.com/CoolnsX"><img src="https://img.shields.io/badge/maintainer-abel-blue"></a>
 <a href="https://github.com/justchokingaround"><img src="https://img.shields.io/badge/maintainer-marco-blue"></a>
