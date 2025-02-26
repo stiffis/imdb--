@@ -75,6 +75,17 @@ Un CLI para buscar peliculas, así como sus respectivas sinópsis y géneros <a>
 - [Contribución](#contribución)
 - [Licencia](#licencia)
 
+## Contribución
+### Reglas de Contribución
+1. **Código Limpio**
+2. **Satisface el linter**
+3. **Ajusta el Readme según cambios (si aplica)**
+4. **No agregues dependencias extra a menos de ser absolutamente necesario**
+5. **Si estás solucionando un problema, abre un _issue_ o enlaza uno existente**
+
+## Licencia
+Este proyecto está bajo la licencia MIT. Para más información, revisa el archivo `LICENSE`.
+
 
 El propósito del presente proyecto de nombre "IMDb--", es implementar una plataforma de *streaming*, donde se administre la *búsqueda y visualización* de sinopsis de películas, este proyecto es especial ya que se usó también como practica para el manejo de "workflows", simulando un ambiente de trabajo real, con reuniones fijas en un horario, donde se comparte el progreso de cada integrante, planificaciones semanales y de retroalimentación. 
 
