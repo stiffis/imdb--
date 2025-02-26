@@ -67,14 +67,16 @@ Un CLI para buscar peliculas, así como sus respectivas sinópsis y géneros <a>
         - [Validación de Entrada](#validación-de-entrada)
     - [Proceso de Desarrollo](#proceso-de-desarrollo)
         - [Metodología de Trabajo](#metodología-de-trabajo)
-        - [Solucion de Errores](#solucion-de-errores)
+        - [Solución de Errores](#solucion-de-errores)
         - [Herramientas Usadas](#herramientas-usadas)
     - [Conclusiones](#conclusiones)
         - [Logros](#logros)
         - [Recomendaciones](#recomendaciones)
 - [Contribución](#contribución)
 - [Licencia](#licencia)
-
+## Introducción
+### Objetivo
+El propósito del presente proyecto de nombre "IMDb--", es implementar una plataforma de *streaming*, donde se administre la *búsqueda y visualización* de sinopsis de películas, este proyecto es especial ya que se usó también como practica para el manejo de "workflows", simulando un ambiente de trabajo real, con reuniones fijas en un horario, donde se comparte el progreso de cada integrante, planificaciones semanales y de retroalimentación. 
 ## Contribución
 ### Reglas de Contribución
 1. **Código Limpio**
@@ -87,5 +89,5 @@ Un CLI para buscar peliculas, así como sus respectivas sinópsis y géneros <a>
 Este proyecto está bajo la licencia MIT. Para más información, revisa el archivo `LICENSE`.
 
 
-El propósito del presente proyecto de nombre "IMDb--", es implementar una plataforma de *streaming*, donde se administre la *búsqueda y visualización* de sinopsis de películas, este proyecto es especial ya que se usó también como practica para el manejo de "workflows", simulando un ambiente de trabajo real, con reuniones fijas en un horario, donde se comparte el progreso de cada integrante, planificaciones semanales y de retroalimentación. 
-
+---
+<p align="center">Copyright &copy; 2025-present <a href="https://github.com/stiffis/imdb--" target="_blank">IMDb-- Org</a>
