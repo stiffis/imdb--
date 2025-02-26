@@ -11,9 +11,9 @@
 <h1 align="center">
 <a href="logo"><img src="/Pasted image 20250226141439.png"></a>
 <br>
-<a href="https://github.com/stiffis"><img src="https://img.shields.io/badge/lead-stiffis-lightblue"></a>
-<a href="https://github.com/CoolnsX"><img src="https://img.shields.io/badge/maintainer-abel-blue"></a>
-<a href="https://github.com/justchokingaround"><img src="https://img.shields.io/badge/maintainer-marco-blue"></a>
+<a href="https://github.com/AntoMGB1"><img src="https://img.shields.io/badge/lead-marco-lightblue"></a>
+<a href="https://github.com/stiffis"><img src="https://img.shields.io/badge/maintainer-stiffis-blue"></a>
+<a href="https://github.com/Vasco2510"><img src="https://img.shields.io/badge/maintainer-abel-blue"></a>
 
 </p>
 
