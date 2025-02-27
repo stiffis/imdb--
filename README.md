@@ -147,17 +147,18 @@ Para seleccionar una opción, se debe ingresar el número correspondiente y pres
     -----------------------------------
     Wolverine
     ```
-        - Si no se encuentra ninguna película que coincida con la búsqueda, se mostrará un mensaje indicando que no se encontraron resultados.
-        ```bash
-        No se encontraron resultados para 'Wolverine'.
-        ```
-        - Si se encuentra una película que coincida con la búsqueda, se preguntará si se desea añadir algun/os género/s a la búsqueda.
-        ```bash
-        ----------------------------------------------------
-        | Desea filtrar los resultados por genero? (s/n):  |
-        ----------------------------------------------------
+        
+    - Si no se encuentra ninguna película que coincida con la búsqueda, se mostrará un mensaje indicando que no se encontraron resultados.
+    ```bash
+    No se encontraron resultados para 'Wolverine'.
+    ```
+    - Si se encuentra una película que coincida con la búsqueda, se preguntará si se desea añadir algun/os género/s a la búsqueda.
+    ```bash
+    ----------------------------------------------------
+    | Desea filtrar los resultados por genero? (s/n):  |
+    ----------------------------------------------------
     
-        ```
+    ```
         - Si se desea añadir algún género a la búsqueda, se debe ingresar `s` y presionar la tecla `Enter`. Luego escribir el género que se desea añadir a la búsqueda y presionar la tecla `Enter`.
         ```bash
         -----------------------
@@ -165,41 +166,41 @@ Para seleccionar una opción, se debe ingresar el número correspondiente y pres
         -----------------------
         comedy
         ```
-        - Se mostrarán las películas que coincidan con la búsqueda y el género seleccionado.
-        ```bash
-        Mostrando pagina 1 de 1
-        1. fear and loathing in las vegas
-        2. logan
-        -------------------------------------
-        | Opciones:                         |
-        | 'si' PARA SIGUIENTE PAGINA        |
-        | 'g' PARA FILTRAR POR GENERO       |
-        | 'r' PARA REMOVER EL ULTIMO FILTRO |
-        |  '0' PARA SALIR:                  |
-        -------------------------------------
+            - Se mostrarán las películas que coincidan con la búsqueda y el género seleccionado.
+            ```bash
+            Mostrando pagina 1 de 1
+            1. fear and loathing in las vegas
+            2. logan
+            -------------------------------------
+            | Opciones:                         |
+            | 'si' PARA SIGUIENTE PAGINA        |
+            | 'g' PARA FILTRAR POR GENERO       |
+            | 'r' PARA REMOVER EL ULTIMO FILTRO |
+            |  '0' PARA SALIR:                  |
+            -------------------------------------
         
-        ```
-        - Detalles de las opciones:
-            - `si`: Muestra la siguiente página de resultados en caso hubieran más películas.
-                ```bash
-                Mostrando pagina 2 de 4
-                6. xmen the official game
-                7. xmen days of future past
-                8. fear and loathing in las vegas
-                9. keyhole
-                10. xmen apocalypse
+            ```
+                - Detalles de las opciones:
+                - `si`: Muestra la siguiente página de resultados en caso hubieran más películas.
+                    ```bash
+                    Mostrando pagina 2 de 4
+                    6. xmen the official game
+                    7. xmen days of future past
+                    8. fear and loathing in las vegas
+                    9. keyhole
+                    10. xmen apocalypse
 
-                -------------------------------------
-                | Opciones:                         |
-                | 'si' PARA SIGUIENTE PAGINA        |
-                | 'g' PARA FILTRAR POR GENERO       |
-                | 'r' PARA REMOVER EL ULTIMO FILTRO |
-                |  '0' PARA SALIR:                  |
-                -------------------------------------
-                
-                ```
-                Si no hay más páginas de resultados, se mostrará un mensaje indicando que no hay más resultados y se volverá al menú principal.
-                ```bash
+                    -------------------------------------
+                    | Opciones:                         |
+                    | 'si' PARA SIGUIENTE PAGINA        |
+                    | 'g' PARA FILTRAR POR GENERO       |
+                    | 'r' PARA REMOVER EL ULTIMO FILTRO |
+                    |  '0' PARA SALIR:                  |
+                    -------------------------------------
+                    
+                    ```
+                    - Si no hay más páginas de resultados, se mostrará un mensaje indicando que no hay más resultados y se volverá al menú principal.
+                    ```bash
                     No hay mas resultados.
 
                     === Menu Principal ===
@@ -214,7 +215,7 @@ Para seleccionar una opción, se debe ingresar el número correspondiente y pres
                     | Seleccione una opcion: |
                     --------------------------
                     
-                ```
+                    ```
             - `g`: Permite filtrar los resultados por género.
             - `r`: Remueve el último filtro aplicado.
             - `0`: Sale de la búsqueda.
