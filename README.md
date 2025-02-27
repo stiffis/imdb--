@@ -23,9 +23,9 @@ Un CLI para buscar peliculas, así como sus respectivas sinópsis y géneros <a>
 
 ---
 ## Integrantes: 
-- Marco Antonio Galindo Bendezú (202310440)
-- Yuri
-- Steve Andy Ildefonso Santos (202410402)
+- Marco Antonio Galindo Bendezú
+- Yuri Abel Escobar Perez
+- Steve Andy Ildefonso Santos
 
 ## Tabla de Contenidos
 - [Introducción](#introducción)
