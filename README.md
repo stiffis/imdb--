@@ -37,7 +37,6 @@ Un CLI para buscar peliculas, así como sus respectivas sinópsis y géneros <a>
 - [Instalación](#instalación)
 - [Manual de Uso](#manual-de-uso)
 - [Documentación](#documentación)
-    - [Casos de Uso](#casos-de-uso)
     - [Diagrama de Clases](#diagrama-de-clases)
     - [Limpieza de Datos](#limpieza-de-datos)
         - [Uso de R](#uso-de-r)
@@ -122,6 +121,7 @@ No tienes peliculas en Ver Mas Tarde.
 4. Ver historial de busquedas
 5. Guardar estado
 6. Restaurar estado
+7. Peliculas recomendadas
 0. Salir
 --------------------------
 | Seleccione una opcion: |
@@ -212,6 +212,7 @@ Para seleccionar una opción, se debe ingresar el número correspondiente y pres
     4. Ver historial de busquedas
     5. Guardar estado
     6. Restaurar estado
+    7. Peliculas recomendadas
     0. Salir
     --------------------------
     | Seleccione una opcion: |
@@ -237,12 +238,112 @@ Para seleccionar una opción, se debe ingresar el número correspondiente y pres
     ```bash
     Estado restaurado.
     ```
+- **Peliculas recomendadas**:
+    - Muestra las películas recomendadas. Si no hay películas recomendadas, se mostrará un mensaje indicando que no hay películas recomendadas.
+    ```bash
+    No hay peliculas recomendadas.
+    ```
 - **Salir**:
     - Sale del programa.
+## Documentación
+### Diagrama de Clases
+El diagrama de clases muestra la estructura de clases del programa, así como las relaciones entre ellas. A continuación, se muestra el diagrama de clases del programa IMDb--:
+
+![Diagrama de Clases](Falta imagen)
+
+### Limpieza de Datos
+Para la limpieza de datos, se utilizó el lenguaje de programación R. A continuación, se detallan los pasos realizados para la limpieza de datos:
+#### Uso de R
+1. **Carga de librearías**:
+    - Se cargaron las librerías necesarias para la limpieza de datos.
+    ```R
+    library(dplyr)
+    library(stringr)
+    ```
+2. **Carga de datos**:
+    - Se cargaron los datos a limpiar.
+    ```R
+    data <- read.csv("C:/Users/Marco/Desktop/Prp/Data.csv")
+    ```
+3. **Función para limpiar texto, eliminando caracteres no latinos y símbolos innecesarios**
+    ```R
+    clean_text <- function(text) {
+    cleaned <- str_replace_all(text, "[^a-zA-Z0-9\\s.!?-]", "")
+    return(cleaned)
+    }
+    ```
+4. **Aplicación de la función**
+    ```R
+    cleaned_data <- data %>%
+    mutate(across(everything(), ~ sapply(., clean_text)))
+    ```
+5. **Guardado de datos limpios**
+    - Se guardaron los datos limpios en un archivo CSV.
+    ```R
+    write.csv(cleaned_data, "C:/Users/Marco/Desktop/Prp/CleanedData.csv", row.names = FALSE)
+    ```
+### Características
+#### Búsqueda con Tree
+
+#### Interfaz CLI
+
+#### Listas de Usuarios
+
+### Arquitectura
+
+#### Estructura de datos
+
+#### Clases principales
+
+#### Uso de STL
+
+#### Uso de threads
+
+### Patrones de Diseño
+
+#### Singleton
+
+#### Decorator
+
+#### Memento
+
+#### Composite
+
+### Rendimiento
+
+#### Complejidad Temporal
+
+#### Complejidad Espacial
+
+#### Tabla de Comparación
+
+#### ¿Qué podemos mejorar?
+
+### Manejo de Errores
+
+#### Errores
+
+#### Excepciones
+
+#### Validación de Entrada
+
+### Proceso de Desarrollo
+
+#### Metodología de Trabajo
+
+#### Solución de Errores
+
+#### Herramientas Usadas
+
+### Conclusiones
+
+#### Logros
+
+#### Recomendaciones
+
 ## Contribución
 ### Reglas de Contribución
 1. **Código Limpio**
-2. **Satisface el linter**
 3. **Ajusta el Readme según cambios (si aplica)**
 4. **No agregues dependencias extra a menos de ser absolutamente necesario**
 5. **Si estás solucionando un problema, abre un _issue_ o enlaza uno existente**
