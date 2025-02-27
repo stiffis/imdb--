@@ -5,7 +5,6 @@
 <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="#Linux"><img src="https://img.shields.io/badge/os-linux-brightgreen">
 <a href="#MacOS"><img src="https://img.shields.io/badge/os-mac-brightgreen">
-<a href="#Android"><img src="https://img.shields.io/badge/os-android-brightgreen">
 <a href="#Windows"><img src="https://img.shields.io/badge/os-windows-yellowgreen">
 <br>
 <h1 align="center">
@@ -24,8 +23,8 @@ Un CLI para buscar peliculas, así como sus respectivas sinópsis y géneros <a>
 ---
 ## Integrantes: 
 - Marco Antonio Galindo Bendezú
-- Yuri Abel Escobar Perez
 - Steve Andy Ildefonso Santos
+- Yuri Abel Escobar Perez
 
 ## Tabla de Contenidos
 - [Introducción](#introducción)
@@ -76,7 +75,40 @@ Un CLI para buscar peliculas, así como sus respectivas sinópsis y géneros <a>
 - [Licencia](#licencia)
 ## Introducción
 ### Objetivo
-El propósito del presente proyecto de nombre "IMDb--", es implementar una plataforma de *streaming*, donde se administre la *búsqueda y visualización* de sinopsis de películas, este proyecto es especial ya que se usó también como practica para el manejo de "workflows", simulando un ambiente de trabajo real, con reuniones fijas en un horario, donde se comparte el progreso de cada integrante, planificaciones semanales y de retroalimentación. 
+El propósito del presente proyecto de nombre "IMDb--", es implementar una plataforma de *streaming*, donde se administre la *búsqueda y visualización* de sinopsis de películas, este proyecto es especial ya que se usó también como practica para el manejo de "workflows", simulando un ambiente de trabajo real, con reuniones fijas en un horario, donde se comparte el progreso de cada integrante, planificaciones semanales y de retroalimentación.
+### Motivación
+Fuimos motivados por la complejidad del proyecto ya que requerimos de conocimientos sobre el manejo de estructuras de datos y algoritmos, así como el uso de programación paralela, además de la necesidad de trabajar en equipo, lo cual nos permitió mejorar nuestras habilidades de comunicación, mejorando la calidad de nuestro trabajo.
+### Alcance
+El proyecto IMDb-- permite la búsqueda de películas mediante un prefijo o una palabra clave, además de mostrar la sinopsis y géneros de la película, también permite a los usuarios crear una lista de películas a las que se le dio like y un lista con las películas para ver después.
+## Requisitos
+### Requisitos de Software
+- **Compilados de C++**: 
+    - Se recomienda usar `g++`(GCC) versión 11.2.0 o superior.
+    - Alternativamente, se puede usar `clang++` versión 13.0.0 o superior.
+- **Sistema operativo**:
+    - Linux (Ubuntu, Fedora, Arch, etc.)
+    - MacOS
+    - Windows
+### Requisitos de Hardware
+No se requiere de un hardware específico, ya que el programa no es muy demandante en cuanto a recursos.
+## Instalación
+Si en caso no se tuviera instalado el compilador de C++, se puede instalar con el siguiente comando:
+```bash
+sudo apt-get install g++
+```
+Para instalar el programa, se debe clonar el repositorio y compilar el código fuente. Para ello, se debe ejecutar los siguientes comandos en la terminal:
+```bash
+git clone <url>
+cd imdb--/
+```
+Para compilar el código fuente, se debe ejecutar el siguiente comando:
+```bash
+g++ -o main main.cpp
+```
+Para ejecutar el programa, se debe ejecutar el siguiente comando:
+```bash
+./main
+```
 ## Contribución
 ### Reglas de Contribución
 1. **Código Limpio**
