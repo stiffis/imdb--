@@ -8,7 +8,7 @@
 <a href="#Windows"><img src="https://img.shields.io/badge/os-windows-yellowgreen">
 <br>
 <h1 align="center">
-<a href="logo"><img src="/Pasted image 20250226141439.png"></a>
+<a href="logo"><img src="resources/Pasted image 20250226141439.png"></a>
 <br>
 <a href="https://github.com/AntoMGB1"><img src="https://img.shields.io/badge/lead-marco-lightblue"></a>
 <a href="https://github.com/stiffis"><img src="https://img.shields.io/badge/maintainer-stiffis-blue"></a>
