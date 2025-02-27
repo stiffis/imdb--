@@ -128,6 +128,99 @@ No tienes peliculas en Ver Mas Tarde.
 --------------------------
 
 ```
+Para seleccionar una opción, se debe ingresar el número correspondiente y presionar la tecla `Enter`. A continuación, se detallan las opciones del menú:
+- **Ver peliculas en Ver Mas Tarde**:
+    - Muestra las películas que se han agregado a la lista de "Ver Mas Tarde". Si no hay películas en la lista, se mostrará un mensaje indicando que no hay películas en la lista.
+    ```bash
+    No tienes peliculas en Ver Mas Tarde.
+    ```
+- **Ver peliculas Likeadas**:
+    - Muestra las películas que se han agregado a la lista de "Likes". Si no hay películas en la lista, se mostrará un mensaje indicando que no hay películas en la lista.
+    ```bash
+    No tienes peliculas en Likes.
+    ```
+- **Buscar peliculas**:
+    - Permite buscar películas por nombre. Se puede ingresar el nombre completo de la película o una parte del nombre. El programa mostrará las películas que coincidan con la búsqueda.
+    ```bash
+    -----------------------------------
+    | Ingrese el termino de busqueda: |
+    -----------------------------------
+    Wolverine
+    ```
+        - Si no se encuentra ninguna película que coincida con la búsqueda, se mostrará un mensaje indicando que no se encontraron resultados.
+        ```bash
+        No se encontraron resultados para 'Wolverine'.
+        ```
+        - Si se encuentra una película que coincida con la búsqueda, se preguntará si se desea añadir algun/os género/s a la búsqueda.
+        ```bash
+        ----------------------------------------------------
+        | Desea filtrar los resultados por genero? (s/n):  |
+        ----------------------------------------------------
+    
+        ```
+        - Si se desea añadir algún género a la búsqueda, se debe ingresar `s` y presionar la tecla `Enter`. Luego escribir el género que se desea añadir a la búsqueda y presionar la tecla `Enter`.
+        ```bash
+        -----------------------
+        | Ingrese el genero:  |
+        -----------------------
+        comedy
+        ```
+        - Se mostrarán las películas que coincidan con la búsqueda y el género seleccionado.
+        ```bash
+        Mostrando pagina 1 de 1
+        1. fear and loathing in las vegas
+        2. logan
+        -------------------------------------
+        | Opciones:                         |
+        | 'si' PARA SIGUIENTE PAGINA        |
+        | 'g' PARA FILTRAR POR GENERO       |
+        | 'r' PARA REMOVER EL ULTIMO FILTRO |
+        |  '0' PARA SALIR:                  |
+        -------------------------------------
+        
+        ```
+        - Detalles de las opciones:
+            - `si`: Muestra la siguiente página de resultados en caso hubieran más películas.
+                ```bash
+                Mostrando pagina 2 de 4
+                6. xmen the official game
+                7. xmen days of future past
+                8. fear and loathing in las vegas
+                9. keyhole
+                10. xmen apocalypse
+
+                -------------------------------------
+                | Opciones:                         |
+                | 'si' PARA SIGUIENTE PAGINA        |
+                | 'g' PARA FILTRAR POR GENERO       |
+                | 'r' PARA REMOVER EL ULTIMO FILTRO |
+                |  '0' PARA SALIR:                  |
+                -------------------------------------
+                
+                ```
+                Si no hay más páginas de resultados, se mostrará un mensaje indicando que no hay más resultados y se volverá al menú principal.
+                ```bash
+                    No hay mas resultados.
+
+                    === Menu Principal ===
+                    1. Ver peliculas en Ver Mas Tarde
+                    2. Ver peliculas Likeadas
+                    3. Buscar peliculas
+                    4. Ver historial de busquedas
+                    5. Guardar estado
+                    6. Restaurar estado
+                    0. Salir
+                    --------------------------
+                    | Seleccione una opcion: |
+                    --------------------------
+                    
+                ```
+            - `g`: Permite filtrar los resultados por género.
+            - `r`: Remueve el último filtro aplicado.
+            - `0`: Sale de la búsqueda.
+
+- **Ver historial de busquedas**:
+
 ## Contribución
 ### Reglas de Contribución
 1. **Código Limpio**
