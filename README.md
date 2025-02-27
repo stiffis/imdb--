@@ -159,6 +159,7 @@ Para seleccionar una opción, se debe ingresar el número correspondiente y pres
     ----------------------------------------------------
     
     ```
+        
         - Si se desea añadir algún género a la búsqueda, se debe ingresar `s` y presionar la tecla `Enter`. Luego escribir el género que se desea añadir a la búsqueda y presionar la tecla `Enter`.
         ```bash
         -----------------------
