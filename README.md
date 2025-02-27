@@ -305,7 +305,13 @@ Las operaciones de búsqueda en el Trie tienen una complejidad temporal de O(m),
 La estructura Trie puede consumir una cantidad significativa de memoria, especialmente si el conjunto de palabras es grande. Sin embargo, esta estructura permite búsquedas rápidas y eficientes.
 
 #### Tabla de Comparación
-Falta completar.
+
+| Operación | 1 Palabra (ms) | 2 Palabras (ms) | 3 Palabras (ms) | Solo busqueda (ms) | Sin Acciones (ms) |
+| --------------- | --------------- | --------------- | --------------- | --------------- | --------------- |
+| Tiempo de Carga de Peliculas | 10615 | 10861 | 10895 | 11517 | 10793 |
+| Tiempo de búsqueda | 0 | 1 | 1 | 1 | 0 |
+| Tiempo de Agregar Like | 0 | 0 | 0| 0 | 0 |
+
 
 #### ¿Qué podemos mejorar?
 1. Uso de Punteros Inteligentes:
