@@ -354,3 +354,8 @@ Este proyecto está bajo la licencia MIT. Para más información, revisa el arch
 
 ---
 <p align="center">Copyright &copy; 2025-present <a href="https://github.com/stiffis/imdb--" target="_blank">IMDb-- Org</a>
+
+⠀ ／l         
+（ﾟ､ ｡ ７       
+⠀ l、ﾞ ~ヽ      
+  じしf_, )ノ ❤️
