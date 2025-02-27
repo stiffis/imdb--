@@ -109,6 +109,25 @@ Para ejecutar el programa, se debe ejecutar el siguiente comando:
 ```bash
 ./main
 ```
+## Manual de Uso
+Una vez ejecutado el programa, se mostrará un menú con las siguientes opciones:
+```bash
+No tienes peliculas en Likes.
+No tienes peliculas en Ver Mas Tarde.
+
+=== Menu Principal ===
+1. Ver peliculas en Ver Mas Tarde
+2. Ver peliculas Likeadas
+3. Buscar peliculas
+4. Ver historial de busquedas
+5. Guardar estado
+6. Restaurar estado
+0. Salir
+--------------------------
+| Seleccione una opcion: |
+--------------------------
+
+```
 ## Contribución
 ### Reglas de Contribución
 1. **Código Limpio**
