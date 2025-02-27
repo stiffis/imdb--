@@ -160,66 +160,67 @@ Para seleccionar una opción, se debe ingresar el número correspondiente y pres
     
     ```
         
-        - Si se desea añadir algún género a la búsqueda, se debe ingresar `s` y presionar la tecla `Enter`. Luego escribir el género que se desea añadir a la búsqueda y presionar la tecla `Enter`.
-        ```bash
-        -----------------------
-        | Ingrese el genero:  |
-        -----------------------
-        comedy
-        ```
-            - Se mostrarán las películas que coincidan con la búsqueda y el género seleccionado.
-            ```bash
-            Mostrando pagina 1 de 1
-            1. fear and loathing in las vegas
-            2. logan
-            -------------------------------------
-            | Opciones:                         |
-            | 'si' PARA SIGUIENTE PAGINA        |
-            | 'g' PARA FILTRAR POR GENERO       |
-            | 'r' PARA REMOVER EL ULTIMO FILTRO |
-            |  '0' PARA SALIR:                  |
-            -------------------------------------
+    - Si se desea añadir algún género a la búsqueda, se debe ingresar `s` y presionar la tecla `Enter`. Luego escribir el género que se desea añadir a la búsqueda y presionar la tecla `Enter`.
+    ```bash
+    -----------------------
+    | Ingrese el genero:  |
+    -----------------------
+    comedy
+    ```
+    - Se mostrarán las películas que coincidan con la búsqueda y el género seleccionado.
+    ```bash
+    Mostrando pagina 1 de 1
+    1. fear and loathing in las vegas
+    2. logan
+    -------------------------------------
+    | Opciones:                         |
+    | 'si' PARA SIGUIENTE PAGINA        |
+    | 'g' PARA FILTRAR POR GENERO       |
+    | 'r' PARA REMOVER EL ULTIMO FILTRO |
+    |  '0' PARA SALIR:                  |
+    -------------------------------------
         
-            ```
-                - Detalles de las opciones:
-                - `si`: Muestra la siguiente página de resultados en caso hubieran más películas.
-                    ```bash
-                    Mostrando pagina 2 de 4
-                    6. xmen the official game
-                    7. xmen days of future past
-                    8. fear and loathing in las vegas
-                    9. keyhole
-                    10. xmen apocalypse
+    ```
 
-                    -------------------------------------
-                    | Opciones:                         |
-                    | 'si' PARA SIGUIENTE PAGINA        |
-                    | 'g' PARA FILTRAR POR GENERO       |
-                    | 'r' PARA REMOVER EL ULTIMO FILTRO |
-                    |  '0' PARA SALIR:                  |
-                    -------------------------------------
-                    
-                    ```
-                    - Si no hay más páginas de resultados, se mostrará un mensaje indicando que no hay más resultados y se volverá al menú principal.
-                    ```bash
-                    No hay mas resultados.
+    - Detalles de las opciones:
+    - `si`: Muestra la siguiente página de resultados en caso hubieran más películas.
+    ```bash
+    Mostrando pagina 2 de 4
+    6. xmen the official game
+    7. xmen days of future past
+    8. fear and loathing in las vegas
+    9. keyhole
+    10. xmen apocalypse
 
-                    === Menu Principal ===
-                    1. Ver peliculas en Ver Mas Tarde
-                    2. Ver peliculas Likeadas
-                    3. Buscar peliculas
-                    4. Ver historial de busquedas
-                    5. Guardar estado
-                    6. Restaurar estado
-                    0. Salir
-                    --------------------------
-                    | Seleccione una opcion: |
-                    --------------------------
+    -------------------------------------
+    | Opciones:                         |
+    | 'si' PARA SIGUIENTE PAGINA        |
+    | 'g' PARA FILTRAR POR GENERO       |
+    | 'r' PARA REMOVER EL ULTIMO FILTRO |
+    |  '0' PARA SALIR:                  |
+    -------------------------------------
                     
-                    ```
-            - `g`: Permite filtrar los resultados por género.
-            - `r`: Remueve el último filtro aplicado.
-            - `0`: Sale de la búsqueda.
+    ```
+    - Si no hay más páginas de resultados, se mostrará un mensaje indicando que no hay más resultados y se volverá al menú principal.
+    ```bash
+    No hay mas resultados.
+
+    === Menu Principal ===
+    1. Ver peliculas en Ver Mas Tarde
+    2. Ver peliculas Likeadas
+    3. Buscar peliculas
+    4. Ver historial de busquedas
+    5. Guardar estado
+    6. Restaurar estado
+    0. Salir
+    --------------------------
+    | Seleccione una opcion: |
+    --------------------------
+    
+    ```
+- `g`: Permite filtrar los resultados por género.
+- `r`: Remueve el último filtro aplicado.
+- `0`: Sale de la búsqueda.
 
 - **Ver historial de busquedas**:
 
