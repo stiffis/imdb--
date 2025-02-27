@@ -7,7 +7,7 @@
 
 ## Integrantes: 
 - Marco Antonio Galindo Bendezú (202310440)
-- 
+- Yuri Abel Escobar Perez (202310682)
 - Steve Andy Ildefonso Santos (202410402)
 ## Plataforma de Streaming
 ![[Pasted image 20250127110130.png]]
