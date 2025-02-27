@@ -2,183 +2,45 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <fstream>
+#include <limits>
+#include <map>
 #include <sstream>
-#include <vector>
-#include <algorithm>
-#include <unordered_map>
 #include <thread>
-#include <mutex>
-
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include <ctime>
 using namespace std;
 
-struct Pelicula {
-    string imdb_id;
-    string title;
-    string plot_synopsis;
-    string tags;
-    int relevancia = 0;
-};
-
-mutex mtx; // Para proteger acceso a los resultados compartidos
-
-// Función para eliminar tildes y convertir a minúsculas
-string normalizarTexto(const string& texto) {
-    string resultado = texto;
-    transform(resultado.begin(), resultado.end(), resultado.begin(), ::tolower);
-
-    unordered_map<char, char> tildes = {
-        {'á', 'a'}, {'é', 'e'}, {'í', 'i'}, {'ó', 'o'}, {'ú', 'u'},
-        {'Á', 'a'}, {'É', 'e'}, {'Í', 'i'}, {'Ó', 'o'}, {'Ú', 'u'}
-    };
-
-    for (char& c : resultado) {
-        if (tildes.count(c)) {
-            c = tildes[c];
-        }
-    }
-    
-    return resultado;
-}
-// Función para leer el CSV
-vector<Pelicula> readCSV(const string& filename) {
-    vector<Pelicula> peliculas;
-    ifstream file(filename);
-
-    if (!file.is_open()) {
-        cerr << "No se pudo abrir el archivo " << filename << endl;
-        return peliculas;
-    }
-
+void printBox(const string &text) {
+    int len = 0;
+    vector<string> lines;
+    stringstream ss(text);
     string line;
-    getline(file, line); // Saltar encabezado
-
-    while (getline(file, line)) {
-        stringstream ss(line);
-        Pelicula pelicula;
-        string basura;
-
-        getline(ss, pelicula.imdb_id, ',');
-        getline(ss, pelicula.title, ',');
-        getline(ss, pelicula.plot_synopsis, ',');
-        getline(ss, pelicula.tags, ',');
-        getline(ss, basura, ','); // Ignorar columnas extra
-        getline(ss, basura, ',');
-
-        peliculas.push_back(pelicula);
+    while (getline(ss, line, '\n')) {
+        lines.push_back(line);
+        if (line.size() > len)
+            len = line.size();
     }
-
-    file.close();
-    return peliculas;
+    string border(len + 4, '-');
+    cout << border << "\n";
+    for (auto &l : lines) {
+        cout << "| " << l;
+        cout << string(len - l.size(), ' ') << " |\n";
+    }
+    cout << border << "\n";
 }
 
-// Función de búsqueda paralela
-void buscarEnBloque(vector<Pelicula>& peliculas, const string& palabra, vector<Pelicula>& resultados) {
-    string palabra_normalizada = normalizarTexto(palabra);
-    vector<Pelicula> temp_resultados;
-
-    for (auto& pelicula : peliculas) {
-        int relevancia = 0;
-        string title_normalizado = normalizarTexto(pelicula.title);
-        string synopsis_normalizado = normalizarTexto(pelicula.plot_synopsis);
-        string tags_normalizado = normalizarTexto(pelicula.tags);
-
-        if (title_normalizado.find(palabra_normalizada) != string::npos) {
-            relevancia += 3;
-        }
-        if (tags_normalizado.find(palabra_normalizada) != string::npos) {
-            relevancia += 2;
-        }
-        if (synopsis_normalizado.find(palabra_normalizada) != string::npos) {
-            relevancia += 1;
-        }
-
-        if (relevancia > 0) {
-            pelicula.relevancia = relevancia;
-            temp_resultados.push_back(pelicula);
-        }
+int countOccurrences(const string &text, const string &word) {
+    int count = 0;
+    stringstream ss(text);
+    string token;
+    while (ss >> token) {
+        if (token == word)
+            count++;
     }
-
-    // Bloqueo para insertar en el vector compartido
-    lock_guard<mutex> lock(mtx);
-    resultados.insert(resultados.end(), temp_resultados.begin(), temp_resultados.end());
+    return count;
 }
-
-// Función de búsqueda principal
-vector<Pelicula> buscarPeliculas(vector<Pelicula>& peliculas, const string& palabra) {
-    int num_threads = thread::hardware_concurrency(); // Obtener número de hilos disponibles
-    int chunk_size = peliculas.size() / num_threads; // Dividir películas entre los hilos
-    vector<Pelicula> resultados;
-    vector<thread> threads;
-
-    for (int i = 0; i < num_threads; i++) {
-        int inicio = i * chunk_size;
-        int fin = (i == num_threads - 1) ? peliculas.size() : (inicio + chunk_size);
-        vector<Pelicula> sub_vector(peliculas.begin() + inicio, peliculas.begin() + fin);
-        threads.push_back(thread(buscarEnBloque, ref(sub_vector), palabra, ref(resultados)));
-    }
-
-    for (auto& t : threads) {
-        t.join(); // Esperar a que terminen todos los hilos
-    }
-
-    // Ordenar resultados por relevancia
-    sort(resultados.begin(), resultados.end(), [](const Pelicula& a, const Pelicula& b) {
-        return a.relevancia > b.relevancia;
-    });
-
-    return resultados;
-}
-
-// Función para mostrar películas con paginación
-void mostrarPeliculas(const vector<Pelicula>& resultados) {
-    if (resultados.empty()) {
-        cout << "No se encontraron películas con la palabra proporcionada.\n";
-        return;
-    }
-
-    int total = resultados.size();
-    int pagina = 0;
-
-    while (true) {
-        int inicio = pagina * 5;
-        int fin = min(inicio + 5, total);
-
-        cout << "\nPelículas encontradas (página " << pagina + 1 << "):\n";
-        for (int i = inicio; i < fin; i++) {
-            cout << "\nTítulo: " << resultados[i].title
-                 << "\nSinopsis: " << resultados[i].plot_synopsis
-                 << "\nIMDB ID: " << resultados[i].imdb_id
-                 << "\n[1] Like  |  [2] Ver más tarde"
-                 << "\n--------------------------------------";
-        }
-
-        if (fin == total) {
-            break; // No hay más películas para mostrar
-        }
-
-        cout << "\n[3] Ver más resultados  |  [0] Salir\n";
-        int opcion;
-        cin >> opcion;
-
-        if (opcion == 3) {
-            pagina++;
-        } else {
-            break;
-        }
-    }
-}
-
-int main() {
-    string filename = "mpst_full_data.csv";
-    vector<Pelicula> peliculas = readCSV(filename);
-
-    string palabra;
-    cout << "Introduce una palabra para buscar (título, sinopsis o tags): ";
-    cin >> palabra;
-
-    vector<Pelicula> resultados = buscarPeliculas(peliculas, palabra);
-    mostrarPeliculas(resultados);
 
 string normalizar_texto(const string &texto) {
     string resultado;
@@ -441,7 +303,62 @@ class GestorPeliculas {
                 cout << "- " << busqueda << endl;
         }
     }
-
+    void recomendar_peliculas() {
+        vector<pair<int, Pelicula>> peliculas_puntuadas; 
+    
+        unordered_map<string, int> generos_frecuentes;
+        for (const auto& id : likes) {
+            const Pelicula& peli = peliculas[id];
+            for (const auto& etiqueta : peli.etiquetas) {
+                generos_frecuentes[etiqueta]++;
+            }
+        }
+    
+        unordered_map<string, int> palabras_historial;
+        for (const auto& busqueda : historial) {
+            vector<string> palabras = dividir(busqueda, ' ');
+            for (const auto& palabra : palabras) {
+                if (!palabra.empty()) {
+                    palabras_historial[palabra]++;
+                }
+            }
+        }
+    
+        for (const auto& [id, pelicula] : peliculas) {
+            if (likes.find(id) != likes.end()) continue; 
+            int puntuacion = 0;
+    
+            for (const auto& etiqueta : pelicula.etiquetas) {
+                if (generos_frecuentes.find(etiqueta) != generos_frecuentes.end()) {
+                    puntuacion += generos_frecuentes[etiqueta] * 10; 
+                }
+            }
+    
+            string texto_completo = pelicula.titulo + " " + pelicula.sinopsis;
+            for (const auto& [palabra, freq] : palabras_historial) {
+                int ocurrencias = countOccurrences(texto_completo, palabra);
+                puntuacion += ocurrencias * freq * 5; 
+            }
+    
+            puntuacion += rand() % 6;
+    
+            peliculas_puntuadas.push_back({puntuacion, pelicula});
+        }
+    
+        sort(peliculas_puntuadas.begin(), peliculas_puntuadas.end(),
+             [](const auto& a, const auto& b) { return a.first > b.first; });
+    
+        cout << "\n=== Peliculas Recomendadas ===" << endl;
+        int limite = min(7, static_cast<int>(peliculas_puntuadas.size()));
+        if (limite == 0) {
+            cout << "No hay suficientes datos para recomendar peliculas. ¡Agrega mas likes o busquedas!" << endl;
+            return;
+        }
+        for (int i = 0; i < limite; i++) {
+            cout << i + 1 << ". " << peliculas_puntuadas[i].second.titulo << endl;
+        }
+        cout << "=============================" << endl;
+    }
     void buscar_pelicula(const string &termino) {
         resultados.clear();
         historial.push_back(termino);
@@ -592,8 +509,6 @@ class GestorPeliculas {
                         new ExtendedMovieDisplay(new BasicMovieDisplay());
                     display->display(p);
                     delete display;
-                    // Mostrar la frecuencia de cada palabra del termino en la
-                    // pelicula seleccionada.
                     string combined = p.titulo + " " + p.sinopsis;
                     cout << "\nFrecuencia de palabras encontradas:" << endl;
                     for (const auto &w : palabras) {
@@ -643,7 +558,10 @@ class CargadorCSV {
         return peliculas;
     }
 };
+
+
 int main() {
+    srand(time(0)); 
     string nombre_archivo = "cleaned_data.csv";
     GestorPeliculas &gestor = GestorPeliculas::getInstance();
     gestor.cargar_datos();
@@ -671,6 +589,7 @@ int main() {
         cout << "4. Ver historial de busquedas" << endl;
         cout << "5. Guardar estado" << endl;
         cout << "6. Restaurar estado" << endl;
+        cout << "7. Peliculas recomendadas" << endl;
         cout << "0. Salir" << endl;
         printBox("Seleccione una opcion:");
         cin >> opcion;
@@ -699,6 +618,8 @@ int main() {
                 mementos.pop_back();
                 cout << "Estado restaurado." << endl;
             }
+        } else if (opcion == 7) {
+            gestor.recomendar_peliculas();
         }
     }
     gestor.guardar_datos();
