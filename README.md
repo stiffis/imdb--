@@ -225,7 +225,7 @@ Para seleccionar una opción, se debe ingresar el número correspondiente y pres
 ### Diagrama de Clases
 El diagrama de clases muestra la estructura de clases del programa, así como las relaciones entre ellas. A continuación, se muestra el diagrama de clases del programa IMDb--:
 
-![Diagrama de Clases](https://drive.google.com/file/d/1_gTeblcuOoYWGjuNLnMBjl0BbXucvRg_/view?usp=sharing)
+[Diagrama de Clases](https://drive.google.com/file/d/1_gTeblcuOoYWGjuNLnMBjl0BbXucvRg_/view?usp=sharing)
 
 ### Limpieza de Datos
 Para la limpieza de datos, se utilizó el lenguaje de programación R. A continuación, se detallan los pasos realizados para la limpieza de datos:
