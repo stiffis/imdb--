@@ -66,9 +66,6 @@ Un CLI para buscar películas, así como sus respectivas sinopsis y géneros
         - [Metodología de Trabajo](#metodología-de-trabajo)
         - [Solución de Errores](#solucion-de-errores)
         - [Herramientas Usadas](#herramientas-usadas)
-    - [Conclusiones](#conclusiones)
-        - [Logros](#logros)
-        - [Recomendaciones](#recomendaciones)
 - [Contribución](#contribución)
 - [Licencia](#licencia)
 
@@ -344,13 +341,6 @@ Se utilizaron varias herramientas para el desarrollo del proyecto, incluyendo:
 - **Editor de código**: Visual Studio Code
 - **Sistema de control de versiones**: Git y GitHub
 - **Lenguaje de programación R**: Para la limpieza de datos
-
-### Conclusiones
-#### Logros
-El proyecto IMDb-- logró implementar una plataforma de búsqueda y visualización de sinopsis de películas, así como la gestión de listas de usuarios.
-
-#### Recomendaciones
-Para futuras mejoras, se recomienda optimizar el uso de memoria del Trie y agregar más funcionalidades a la interfaz CLI.
 
 ## Contribución
 ### Reglas de Contribución
