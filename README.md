@@ -218,12 +218,27 @@ Para seleccionar una opción, se debe ingresar el número correspondiente y pres
     --------------------------
     
     ```
-- `g`: Permite filtrar los resultados por género.
-- `r`: Remueve el último filtro aplicado.
-- `0`: Sale de la búsqueda.
+    - `g`: Permite filtrar los resultados por género.
+    - `r`: Remueve el último filtro aplicado.
+    - `0`: Sale de la búsqueda.
 
 - **Ver historial de busquedas**:
-
+    - Muestra el historial de búsquedas realizadas. Si no se ha realizado ninguna búsqueda, se mostrará un mensaje indicando que no hay búsquedas en el historial.
+    ```bash
+    No hay busquedas en el historial.
+    ```
+- **Guardar estado**:
+    - Guarda el estado actual del programa. Se mostrará un mensaje indicando que el estado ha sido guardado.
+    ```bash
+    Estado guardado.
+    ```
+- **Restaurar estado**:
+    - Restaura el estado guardado previamente. Se mostrará un mensaje indicando que el estado ha sido restaurado.
+    ```bash
+    Estado restaurado.
+    ```
+- **Salir**:
+    - Sale del programa.
 ## Contribución
 ### Reglas de Contribución
 1. **Código Limpio**
