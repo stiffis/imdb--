@@ -26,6 +26,8 @@ Un CLI para buscar películas, así como sus respectivas sinopsis y géneros
 - Steve Andy Ildefonso Santos
 - Yuri Abel Escobar Perez
 
+## Link del Video de la Presentación
+[Video de la Presentación](https://drive.google.com/file/d/1pmz323RIwratwsBd9MRX343NZdQM-Imh/view?usp=sharing)
 ## Tabla de Contenidos
 - [Introducción](#introducción)
     - [Objetivo](#objetivo)
