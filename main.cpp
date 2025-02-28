@@ -432,7 +432,7 @@ class GestorPeliculas {
                             "resultados:"
                          << endl;
                 }
-           } else if (respuesta == "r") {
+            } else if (respuesta == "r") {
                 if (!stackFiltros.empty()) {
                     resultados = stackFiltros.back();
                     stackFiltros.pop_back();
@@ -453,8 +453,6 @@ class GestorPeliculas {
                         new ExtendedMovieDisplay(new BasicMovieDisplay());
                     display->display(p);
                     delete display;
-                    // Mostrar la frecuencia de cada palabra del termino en la
-                    // pelicula seleccionada.
                     string combined = p.titulo + " " + p.sinopsis;
                     cout << "\nFrecuencia de palabras encontradas:" << endl;
                     for (const auto &w : palabras) {
