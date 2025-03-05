@@ -104,8 +104,8 @@ class Pelicula {
     vector<string> etiquetas;
     Pelicula() : imdb_id(""), titulo(""), sinopsis(""), etiquetas() {}
     Pelicula(string id, string t, string s, vector<string> e)
-        : imdb_id(move(id)), titulo(move(t)), sinopsis(move(s)),
-          etiquetas(move(e)) {}
+        : imdb_id(std::move(id)), titulo(std::move(t)), sinopsis(std::move(s)),
+          etiquetas(std::move(e)) {}
 };
 
 class MovieDisplay {
